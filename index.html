@@ -51,6 +51,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
         }
 
         .logo {
@@ -119,6 +139,33 @@
             margin-bottom: 56px;
             font-weight: 400;
             animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-highlights {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(140px, 1fr));
+            gap: 14px;
+            width: 100%;
+            max-width: 740px;
+            margin: 0 auto 34px;
+        }
+
+        .highlight-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.86);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .highlight-item i {
+            color: #4ade80;
         }
 
         /* Waitlist Card */
@@ -329,6 +376,24 @@
             background: rgba(0, 0, 0, 0.2);
         }
 
+        .section-header {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 44px;
+            padding: 0 24px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 17px;
+        }
+
         .section-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -421,6 +486,150 @@
             font-size: 14px;
         }
 
+        .comparison {
+            padding: 60px 0 80px;
+        }
+
+        .comparison-card {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 12px;
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            align-items: center;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row div:first-child {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 14px;
+        }
+
+        .comparison-head {
+            background: rgba(74, 222, 128, 0.08);
+            font-weight: 700;
+            color: white;
+        }
+
+        .check {
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .xmark {
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+        }
+
+        .testimonial-section {
+            padding: 40px 0 100px;
+        }
+
+        .testimonial-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 0 24px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 24px;
+        }
+
+        .testimonial-card p {
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .author {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .faq {
+            padding: 20px 0 90px;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            gap: 12px;
+        }
+
+        details {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 16px 18px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        details p {
+            margin-top: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .cta-band {
+            margin: 0 auto 90px;
+            max-width: 960px;
+            border: 1px solid rgba(74, 222, 128, 0.25);
+            background: radial-gradient(circle at top right, rgba(74, 222, 128, 0.2), rgba(5, 5, 5, 0.5));
+            border-radius: 24px;
+            padding: 34px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cta-band h3 {
+            font-size: 30px;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .cta-band p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            font-size: 15px;
+        }
+
+        .cta-band a {
+            color: #041108;
+            background: #4ade80;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 12px 22px;
+            white-space: nowrap;
+        }
+
         /* Footer */
         footer {
             padding: 60px 0;
@@ -450,6 +659,10 @@
             .hero { padding-top: 40px; }
             .waitlist-form { padding: 24px; }
             .steps-container { flex-direction: column; gap: 60px; }
+            .hero-highlights { grid-template-columns: 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .comparison-row { grid-template-columns: 1.2fr 1fr 1fr; font-size: 14px; padding: 14px; }
+            .cta-band { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -457,6 +670,11 @@
     <div class="wrapper">
         <header>
             <div class="logo">airo!</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How it works</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
         </header>
 
         <section class="hero">
@@ -470,6 +688,12 @@
                 Experience the future of meal tracking. AI-powered analysis, 
                 smart recipe generation, and personalized health insights.
             </p>
+
+            <div class="hero-highlights">
+                <div class="highlight-item"><i class="fa-solid fa-bolt"></i> 5-second food scans</div>
+                <div class="highlight-item"><i class="fa-solid fa-bullseye"></i> Goal-based nutrition plans</div>
+                <div class="highlight-item"><i class="fa-solid fa-shield-heart"></i> Built with health privacy in mind</div>
+            </div>
 
             <div class="waitlist-container">
                 <form id="waitlist-form" class="waitlist-form">
@@ -507,7 +731,11 @@
         </section>
 
         <!-- Features Section -->
-        <section class="features">
+        <section class="features" id="features">
+            <div class="section-header">
+                <h2>Everything you need to eat smarter</h2>
+                <p>airo combines meal intelligence, habit coaching, and practical guidance to help you make progress every week.</p>
+            </div>
             <div class="section-container">
                 <div class="feature-card">
                     <div class="icon-box">
@@ -530,11 +758,32 @@
                     <h3>Health Insights</h3>
                     <p>Track your progress with detailed analytics and receive actionable health insights daily.</p>
                 </div>
+                <div class="feature-card">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <h3>Weekly Planning</h3>
+                    <p>Build a realistic meal plan for your week with automatic grocery lists and prep reminders.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-user-group"></i>
+                    </div>
+                    <h3>Coach + Community</h3>
+                    <p>Stay motivated with optional accountability circles, check-ins, and positive progress streaks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h3>Biomarker Friendly</h3>
+                    <p>Connect glucose, weight, and activity data to understand how your meals impact your body.</p>
+                </div>
             </div>
         </section>
 
         <!-- How It Works -->
-        <section class="how-it-works">
+        <section class="how-it-works" id="how-it-works">
             <h2>How it works</h2>
             <div class="steps-container">
                 <div class="step">
@@ -553,6 +802,90 @@
                     <p>Get insights and adjust your diet effortlessly.</p>
                 </div>
             </div>
+        </section>
+
+        <section class="comparison">
+            <div class="section-header">
+                <h2>Beyond calorie counting</h2>
+                <p>Most nutrition apps stop at logging. airo helps you understand patterns and change behavior.</p>
+            </div>
+            <div class="comparison-card">
+                <div class="comparison-row comparison-head">
+                    <div>Capability</div>
+                    <div>Typical app</div>
+                    <div>airo</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Photo-based meal recognition</div>
+                    <div class="xmark">Limited</div>
+                    <div class="check">Included</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Daily macro and micronutrient coaching</div>
+                    <div class="xmark">Basic</div>
+                    <div class="check">Adaptive</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Personalized recipe generation</div>
+                    <div class="xmark">No</div>
+                    <div class="check">Yes</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Habit insights with weekly action plan</div>
+                    <div class="xmark">Rare</div>
+                    <div class="check">Core feature</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonial-section">
+            <div class="section-header">
+                <h2>Loved by early users</h2>
+                <p>What our private beta members are already saying.</p>
+            </div>
+            <div class="testimonial-grid">
+                <article class="testimonial-card">
+                    <p>“The food photo analysis feels like magic. I finally understand why my energy dips in the afternoon.”</p>
+                    <div class="author">— Priya, Product Designer</div>
+                </article>
+                <article class="testimonial-card">
+                    <p>“airo gave me meals I can actually cook on busy weekdays. The grocery list feature saves me so much time.”</p>
+                    <div class="author">— Marcus, Startup Founder</div>
+                </article>
+                <article class="testimonial-card">
+                    <p>“I stopped obsessing over numbers and started focusing on better habits. The weekly insights are incredibly useful.”</p>
+                    <div class="author">— Elena, Fitness Coach</div>
+                </article>
+            </div>
+        </section>
+
+        <section class="faq" id="faq">
+            <div class="section-header">
+                <h2>Frequently asked questions</h2>
+                <p>Everything you need to know before joining the waitlist.</p>
+            </div>
+            <div class="faq-list">
+                <details>
+                    <summary>When will airo launch?</summary>
+                    <p>We are onboarding waitlist users in batches. Early members will receive an invite and guided onboarding as features roll out.</p>
+                </details>
+                <details>
+                    <summary>Will it work for different dietary preferences?</summary>
+                    <p>Yes. airo supports high-protein, vegetarian, vegan, Mediterranean, low-carb, and custom nutrition styles.</p>
+                </details>
+                <details>
+                    <summary>How is my data handled?</summary>
+                    <p>Your health data is encrypted, private by default, and never sold. You can export or delete your data at any time.</p>
+                </details>
+            </div>
+        </section>
+
+        <section class="cta-band">
+            <div>
+                <h3>Ready to feel better every day?</h3>
+                <p>Join the waitlist and get priority access, launch perks, and a free starter nutrition blueprint.</p>
+            </div>
+            <a href="#waitlist-form">Get early access</a>
         </section>
 
         <footer>
