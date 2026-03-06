@@ -9,8 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --primary-green: #0c5920;
-            --dark-green: #022c0b;
+            --primary-green: #22c55e;
+            --dark-green: #0b0b0d;
             --glass-bg: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-primary: #ffffff;
@@ -28,12 +28,49 @@
             font-family: 'Inter', sans-serif;
             background-color: #000;
             background-image: 
-                radial-gradient(circle at 50% 0%, #166534 0%, #0c5920 30%, #000000 80%);
+                radial-gradient(circle at 50% -20%, #1f1f23 0%, #0f0f12 45%, #070708 100%);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.5;
         }
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 460px;
+            height: 460px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -2;
+            animation: floatOrb 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        body::before {
+            top: -180px;
+            left: -120px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        body::after {
+            right: -120px;
+            bottom: -180px;
+            background: rgba(34, 197, 94, 0.12);
+            animation-delay: -5s;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.08;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.2) 1px, transparent 1px), radial-gradient(circle at 80% 40%, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle at 50% 80%, rgba(255,255,255,0.15) 1px, transparent 1px);
+            background-size: 120px 120px;
+        }
+
 
         /* Layout */
         .wrapper {
@@ -51,6 +88,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
         }
 
         .logo {
@@ -91,7 +148,7 @@
         .hero-badge span {
             width: 6px;
             height: 6px;
-            background-color: #4ade80;
+            background-color: #86efac;
             border-radius: 50%;
             box-shadow: 0 0 10px #4ade80;
         }
@@ -119,6 +176,33 @@
             margin-bottom: 56px;
             font-weight: 400;
             animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-highlights {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(140px, 1fr));
+            gap: 14px;
+            width: 100%;
+            max-width: 740px;
+            margin: 0 auto 34px;
+        }
+
+        .highlight-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.86);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .highlight-item i {
+            color: #86efac;
         }
 
         /* Waitlist Card */
@@ -233,14 +317,15 @@
         button {
             margin-top: 8px;
             padding: 16px;
-            background: white;
-            color: #000;
+            background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%);
+            color: #0b0b0d;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.28s ease;
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.12);
         }
 
         button:hover {
@@ -298,8 +383,8 @@
         }
 
         .success {
-            background: rgba(74, 222, 128, 0.1);
-            color: #4ade80;
+            background: rgba(255, 255, 255, 0.08);
+            color: #86efac;
             border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
@@ -323,10 +408,159 @@
             to { opacity: 1; }
         }
 
+
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(25px, -25px) scale(1.06); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.2); }
+            50% { box-shadow: 0 0 0 12px rgba(74, 222, 128, 0.02); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .metrics-strip {
+            width: 100%;
+            max-width: 980px;
+            margin: 0 auto 70px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(130px, 1fr));
+            gap: 14px;
+        }
+
+        .metric-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 16px 14px;
+            text-align: center;
+            animation: pulseGlow 4.5s ease-in-out infinite;
+        }
+
+        .metric-item strong {
+            display: block;
+            font-size: 26px;
+            color: #9af8be;
+            letter-spacing: -1px;
+        }
+
+        .metric-item span {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .product-preview {
+            padding: 20px 0 90px;
+        }
+
+        .preview-grid {
+            max-width: 1050px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            padding: 0 24px;
+        }
+
+        .preview-panel,
+        .preview-stack article {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 26px;
+        }
+
+        .phone-shell {
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 16px;
+            background: rgba(5, 16, 8, 0.8);
+            max-width: 320px;
+        }
+
+        .scan-card {
+            border-radius: 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .macro-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .macro-bar span {
+            display: block;
+            height: 100%;
+            width: 72%;
+            background: linear-gradient(90deg, #34d399, #a7f3d0);
+            animation: macroFill 2s ease-out;
+        }
+
+        @keyframes macroFill {
+            from { width: 0; }
+            to { width: 72%; }
+        }
+
+        .preview-stack {
+            display: grid;
+            gap: 20px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(74, 222, 128, 0.12);
+            color: #9af8be;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
         /* Features Section */
         .features {
             padding: 80px 0;
             background: rgba(0, 0, 0, 0.2);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 44px;
+            padding: 0 24px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 17px;
         }
 
         .section-container {
@@ -354,12 +588,12 @@
         .icon-box {
             width: 48px;
             height: 48px;
-            background: rgba(74, 222, 128, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #4ade80;
+            color: #86efac;
             font-size: 20px;
             margin-bottom: 24px;
         }
@@ -413,12 +647,156 @@
             font-size: 18px;
             font-weight: 700;
             margin-bottom: 8px;
-            color: #4ade80;
+            color: #86efac;
         }
 
         .step p {
             color: var(--text-secondary);
             font-size: 14px;
+        }
+
+        .comparison {
+            padding: 60px 0 80px;
+        }
+
+        .comparison-card {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 12px;
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            align-items: center;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row div:first-child {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 14px;
+        }
+
+        .comparison-head {
+            background: rgba(255, 255, 255, 0.04);
+            font-weight: 700;
+            color: white;
+        }
+
+        .check {
+            color: #86efac;
+            font-weight: 700;
+        }
+
+        .xmark {
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+        }
+
+        .testimonial-section {
+            padding: 40px 0 100px;
+        }
+
+        .testimonial-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 0 24px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 24px;
+        }
+
+        .testimonial-card p {
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .author {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .faq {
+            padding: 20px 0 90px;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            gap: 12px;
+        }
+
+        details {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 16px 18px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        details p {
+            margin-top: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .cta-band {
+            margin: 0 auto 90px;
+            max-width: 960px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.12), rgba(10, 10, 12, 0.9));
+            border-radius: 24px;
+            padding: 34px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cta-band h3 {
+            font-size: 30px;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .cta-band p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            font-size: 15px;
+        }
+
+        .cta-band a {
+            color: #0b0b0d;
+            background: #f3f4f6;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 12px 22px;
+            white-space: nowrap;
         }
 
         /* Footer */
@@ -450,26 +828,43 @@
             .hero { padding-top: 40px; }
             .waitlist-form { padding: 24px; }
             .steps-container { flex-direction: column; gap: 60px; }
+            .hero-highlights { grid-template-columns: 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .comparison-row { grid-template-columns: 1.2fr 1fr 1fr; font-size: 14px; padding: 14px; }
+            .cta-band { flex-direction: column; align-items: flex-start; }
+            .metrics-strip { grid-template-columns: repeat(2, 1fr); }
+            .preview-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+    <div class="noise"></div>
     <div class="wrapper">
         <header>
             <div class="logo">airo!</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How it works</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
         </header>
 
         <section class="hero">
             <div class="hero-badge">
-                <span></span> Access Opening Soon
+                <span></span> In active development
             </div>
             
             <h1>Nutrition Intelligence, <br><span>Reimagined.</span></h1>
             
             <p class="subtitle">
-                Experience the future of meal tracking. AI-powered analysis, 
-                smart recipe generation, and personalized health insights.
+                airo is currently being developed by our team to deliver premium nutrition guidance without the noise. Join the waitlist for early updates and access.
             </p>
+
+            <div class="hero-highlights">
+                <div class="highlight-item"><i class="fa-solid fa-code-branch"></i> Product currently in build phase</div>
+                <div class="highlight-item"><i class="fa-solid fa-compass"></i> Premium UX direction in progress</div>
+                <div class="highlight-item"><i class="fa-solid fa-shield-heart"></i> Privacy-first architecture planned</div>
+            </div>
 
             <div class="waitlist-container">
                 <form id="waitlist-form" class="waitlist-form">
@@ -506,15 +901,61 @@
 
         </section>
 
+        <section class="metrics-strip reveal">
+            <div class="metric-item"><strong>—</strong><span>accuracy metrics pending release</span></div>
+            <div class="metric-item"><strong>—</strong><span>user ratings coming after launch</span></div>
+            <div class="metric-item"><strong>WIP</strong><span>time-saving benchmarks in progress</span></div>
+            <div class="metric-item"><strong>WIP</strong><span>outcome studies in development</span></div>
+        </section>
+
+        <section class="product-preview reveal">
+            <div class="section-header">
+                <h2>A product that feels as smart as it looks</h2>
+                <p>A refined preview of the product direction while the developer team actively builds the full experience.</p>
+            </div>
+            <div class="preview-grid">
+                <div class="preview-panel">
+                    <div class="pill"><i class="fa-solid fa-camera"></i> Live AI meal scan</div>
+                    <div class="phone-shell">
+                        <div class="scan-card">
+                            <strong>Sample meal scan preview</strong>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 6px;">Nutrition estimation module in active development</p>
+                            <div class="macro-bar"><span></span></div>
+                        </div>
+                        <div class="scan-card">
+                            <strong>Coach recommendation</strong>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 6px;">Example coaching guidance shown as a product preview while personalized recommendations are being finalized.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-stack">
+                    <article>
+                        <div class="pill"><i class="fa-solid fa-wand-magic-sparkles"></i> Personalized by design</div>
+                        <h3>Context-aware coaching</h3>
+                        <p>Adaptive logic and personalized coaching flows are currently being implemented by the developer.</p>
+                    </article>
+                    <article>
+                        <div class="pill"><i class="fa-solid fa-chart-pie"></i> Decision-ready insights</div>
+                        <h3>See what actually moves your health</h3>
+                        <p>Insight dashboards are in development and will be introduced progressively during early access.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <!-- Features Section -->
-        <section class="features">
+        <section class="features reveal" id="features">
+            <div class="section-header">
+                <h2>Everything you need to eat smarter</h2>
+                <p>A cleaner, professional experience inspired by modern product design: monochrome foundation with focused green accents.</p>
+            </div>
             <div class="section-container">
                 <div class="feature-card">
                     <div class="icon-box">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </div>
                     <h3>AI Analysis</h3>
-                    <p>Snap a photo of your meal and let our AI instantly analyze nutritional content with 98% accuracy.</p>
+                    <p>Scan meals quickly and receive structured nutrition analysis as the core engine continues to evolve.</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box">
@@ -530,11 +971,32 @@
                     <h3>Health Insights</h3>
                     <p>Track your progress with detailed analytics and receive actionable health insights daily.</p>
                 </div>
+                <div class="feature-card">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <h3>Weekly Planning</h3>
+                    <p>Build a realistic meal plan for your week with automatic grocery lists and prep reminders.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-user-group"></i>
+                    </div>
+                    <h3>Coach + Community</h3>
+                    <p>Stay motivated with optional accountability circles, check-ins, and positive progress streaks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h3>Biomarker Friendly</h3>
+                    <p>Connect glucose, weight, and activity data to understand how your meals impact your body.</p>
+                </div>
             </div>
         </section>
 
         <!-- How It Works -->
-        <section class="how-it-works">
+        <section class="how-it-works reveal" id="how-it-works">
             <h2>How it works</h2>
             <div class="steps-container">
                 <div class="step">
@@ -553,6 +1015,90 @@
                     <p>Get insights and adjust your diet effortlessly.</p>
                 </div>
             </div>
+        </section>
+
+        <section class="comparison reveal">
+            <div class="section-header">
+                <h2>Beyond calorie counting</h2>
+                <p>We are intentionally avoiding hard claims until testing is complete. Below is the planned product direction.</p>
+            </div>
+            <div class="comparison-card">
+                <div class="comparison-row comparison-head">
+                    <div>Capability</div>
+                    <div>Typical app</div>
+                    <div>airo</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Photo-based meal recognition</div>
+                    <div class="xmark">Limited</div>
+                    <div class="check" >Planned</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Daily macro and micronutrient coaching</div>
+                    <div class="xmark">Basic</div>
+                    <div class="check" >Planned</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Personalized recipe generation</div>
+                    <div class="xmark">No</div>
+                    <div class="check" >Planned</div>
+                </div>
+                <div class="comparison-row">
+                    <div>Habit insights with weekly action plan</div>
+                    <div class="xmark">Rare</div>
+                    <div class="check" >Planned</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonial-section reveal">
+            <div class="section-header">
+                <h2>Development updates</h2>
+                <p>No user testimonials yet — the app is still under active development.</p>
+            </div>
+            <div class="testimonial-grid">
+                <article class="testimonial-card">
+                    <p>Current focus: finalizing meal recognition quality and polishing the visual scanning workflow.</p>
+                    <div class="author">— Build log, Week 1</div>
+                </article>
+                <article class="testimonial-card">
+                    <p>Current focus: recipe generation logic, shopping list structure, and cleaner planning interactions.</p>
+                    <div class="author">— Build log, Week 2</div>
+                </article>
+                <article class="testimonial-card">
+                    <p>Current focus: insights architecture, onboarding copy, and dashboard information hierarchy.</p>
+                    <div class="author">— Build log, Week 3</div>
+                </article>
+            </div>
+        </section>
+
+        <section class="faq reveal" id="faq">
+            <div class="section-header">
+                <h2>Frequently asked questions</h2>
+                <p>Everything you need to know before joining the waitlist.</p>
+            </div>
+            <div class="faq-list">
+                <details>
+                    <summary>When will airo launch?</summary>
+                    <p>We are onboarding waitlist users in batches. Early members will receive an invite and guided onboarding as features roll out.</p>
+                </details>
+                <details>
+                    <summary>Will it work for different dietary preferences?</summary>
+                    <p>Diet preference support is being developed now and will expand over time after launch.</p>
+                </details>
+                <details>
+                    <summary>How is my data handled?</summary>
+                    <p>Your health data is encrypted, private by default, and never sold. You can export or delete your data at any time.</p>
+                </details>
+            </div>
+        </section>
+
+        <section class="cta-band reveal">
+            <div>
+                <h3>Ready to feel better every day?</h3>
+                <p>Join the waitlist to follow development updates and receive access when the first stable release is ready.</p>
+            </div>
+            <a href="#waitlist-form">Get early access</a>
         </section>
 
         <footer>
@@ -596,6 +1142,20 @@
         const submitBtn = document.getElementById('submit-btn');
         const successMsg = document.getElementById('success-msg');
         const errorMsg = document.getElementById('error-msg');
+
+
+
+        const revealItems = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        revealItems.forEach((item) => revealObserver.observe(item));
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
