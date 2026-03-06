@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>airo! - Nutrition Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>airo! — Nutrition Intelligence in Development</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --primary-green: #22c55e;
-            --dark-green: #0b0b0d;
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
+            --bg: #060607;
+            --surface: #0f1013;
+            --surface-soft: #13151a;
+            --border: rgba(255, 255, 255, 0.12);
+            --text: #f5f7fa;
+            --muted: rgba(245, 247, 250, 0.72);
+            --accent: #39d98a;
+            --accent-soft: rgba(57, 217, 138, 0.18);
         }
 
         * {
@@ -24,57 +26,38 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000;
-            background-image: 
-                radial-gradient(circle at 50% -20%, #1f1f23 0%, #0f0f12 45%, #070708 100%);
-            color: var(--text-primary);
+            background:
+                radial-gradient(circle at 12% 14%, rgba(60, 64, 80, 0.35) 0%, transparent 30%),
+                radial-gradient(circle at 82% 18%, rgba(57, 217, 138, 0.14) 0%, transparent 26%),
+                radial-gradient(circle at 48% 85%, rgba(88, 87, 255, 0.08) 0%, transparent 38%),
+                var(--bg);
+            color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.5;
         }
 
-        body::before,
-        body::after {
-            content: '';
-            position: fixed;
-            width: 460px;
-            height: 460px;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -2;
-            animation: floatOrb 12s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        body::before {
-            top: -180px;
-            left: -120px;
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        body::after {
-            right: -120px;
-            bottom: -180px;
-            background: rgba(34, 197, 94, 0.12);
-            animation-delay: -5s;
-        }
-
-        .noise {
+        .grid-overlay {
             position: fixed;
             inset: 0;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.08;
-            background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.2) 1px, transparent 1px), radial-gradient(circle at 80% 40%, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle at 50% 80%, rgba(255,255,255,0.15) 1px, transparent 1px);
-            background-size: 120px 120px;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,0.65), rgba(0,0,0,0.98));
+            opacity: 0.55;
         }
 
-
-        /* Layout */
         .wrapper {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             padding: 0 24px;
             display: flex;
@@ -82,348 +65,498 @@
             min-height: 100vh;
         }
 
-        /* Header */
         header {
-            padding: 40px 0;
+            position: sticky;
+            top: 12px;
+            z-index: 30;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
+            margin: 16px 0 24px;
+            padding: 14px 18px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: rgba(10, 10, 12, 0.72);
+            backdrop-filter: blur(16px);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.7px;
+        }
+
+        .logo span {
+            color: var(--accent);
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
             list-style: none;
+            gap: 18px;
+            align-items: center;
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.75);
+            color: rgba(255,255,255,0.82);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            transition: color .2s ease;
         }
 
         .nav-links a:hover {
-            color: #ffffff;
+            color: #fff;
         }
 
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(to bottom, #fff, #ccc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Hero Section */
-        .hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        .nav-cta {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            background: linear-gradient(135deg, #151820 0%, #0f1013 100%);
+        }
+
+        .hero {
+            padding: 48px 0 64px;
             text-align: center;
-            padding: 60px 0 100px;
         }
 
         .hero-badge {
             display: inline-flex;
-            align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 32px;
-            backdrop-filter: blur(10px);
-            animation: fadeInDown 0.8s ease-out;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.03);
+            padding: 8px 14px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 24px;
         }
 
-        .hero-badge span {
-            width: 6px;
-            height: 6px;
-            background-color: #86efac;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #4ade80;
+        .hero-badge i {
+            color: var(--accent);
         }
 
         h1 {
-            font-size: 72px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -2px;
-            max-width: 900px;
-            animation: fadeInUp 0.8s ease-out 0.1s backwards;
+            font-size: clamp(42px, 7vw, 90px);
+            line-height: 1.03;
+            letter-spacing: -2.2px;
+            max-width: 980px;
+            margin: 0 auto 18px;
+            font-weight: 900;
         }
 
-        h1 span {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        h1 .accent {
+            background: linear-gradient(130deg, #ffffff 0%, #b4f2d3 45%, #5af0a8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 540px;
-            margin-bottom: 56px;
-            font-weight: 400;
-            animation: fadeInUp 0.8s ease-out 0.2s backwards;
-        }
-
-        .hero-highlights {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(140px, 1fr));
-            gap: 14px;
-            width: 100%;
-            max-width: 740px;
+            max-width: 760px;
             margin: 0 auto 34px;
+            font-size: clamp(17px, 2.3vw, 24px);
+            color: var(--muted);
         }
 
-        .highlight-item {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 13px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #f5f7fa;
+            color: #0b0d12;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+        }
+
+        .hero-shell {
+            max-width: 1100px;
+            margin: 0 auto;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+        }
+
+        .shell-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(7,8,10,0.75);
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.27);
+        }
+
+        .shell-head strong {
+            font-size: 13px;
+            color: rgba(255,255,255,0.86);
+        }
+
+        .shell-body {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 350px;
+        }
+
+        .sidebar {
+            border-right: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+            padding: 18px;
+        }
+
+        .sidebar h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .sidebar li {
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.88);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .main-preview {
+            padding: 20px;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 14px;
+        }
+
+        .preview-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .preview-top h3 {
+            font-size: 30px;
+            letter-spacing: -0.8px;
+        }
+
+        .chip {
+            font-size: 12px;
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--accent-soft);
+            color: #b8f8d8;
+        }
+
+        .preview-cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .preview-card {
+            border: 1px solid var(--border);
             border-radius: 14px;
             padding: 14px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .preview-card h5 {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .preview-card p {
+            color: var(--muted);
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.86);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-weight: 500;
         }
 
-        .highlight-item i {
-            color: #86efac;
+        .logo-strip {
+            margin: 24px auto 0;
+            max-width: 1000px;
+            border-top: 1px solid rgba(255,255,255,0.11);
+            padding: 18px 10px 0;
+            display: grid;
+            grid-template-columns: repeat(6, minmax(90px, 1fr));
+            gap: 12px;
         }
 
-        /* Waitlist Card */
-        .waitlist-container {
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        .logo-pill {
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            text-align: center;
+            font-size: 12px;
+            padding: 8px 10px;
+            color: rgba(255,255,255,0.78);
+            background: rgba(255,255,255,0.02);
         }
 
-        /* Glow effect behind form */
-        .waitlist-container::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: linear-gradient(135deg, rgba(22, 101, 52, 0.5), rgba(12, 89, 32, 0.2));
-            filter: blur(40px);
-            z-index: -1;
-            border-radius: 40px;
+        .section {
+            padding: 84px 0;
         }
 
-        .waitlist-form {
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        .section-header {
+            max-width: 760px;
+            margin: 0 auto 34px;
+            text-align: center;
         }
 
-        /* Input Styling */
-        .input-group {
-            position: relative;
+        .section-header h2 {
+            font-size: clamp(32px, 5vw, 54px);
+            line-height: 1.1;
+            letter-spacing: -1.2px;
+            margin-bottom: 10px;
         }
 
-        input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px;
-            transition: all 0.2s ease;
+        .section-header p {
+            font-size: 17px;
+            color: var(--muted);
         }
 
-        input:focus, textarea:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(74, 222, 128, 0.5); /* Green focus */
-            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1);
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(240px, 1fr));
+            gap: 14px;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+        .feature-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            background: linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
         }
 
-        /* Custom Select Styling */
-        .select-wrapper {
-            position: relative;
+        .feature-card i {
+            color: var(--accent);
+            margin-bottom: 12px;
+            font-size: 17px;
         }
 
-        .select-wrapper::after {
-            content: '\f107'; /* FontAwesome Chevron Down */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            pointer-events: none;
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 14px;
+        }
+
+        .panel {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .panel h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .panel p,
+        .panel li {
+            color: var(--muted);
             font-size: 14px;
         }
 
-        select {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px;
-            appearance: none; /* Remove default arrow */
-            -webkit-appearance: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .panel ul {
+            margin-left: 17px;
+            display: grid;
+            gap: 8px;
         }
 
-        select:focus {
-            outline: none;
-            border-color: rgba(74, 222, 128, 0.5);
-            background: rgba(255, 255, 255, 0.08);
+        .waitlist-wrap {
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .waitlist-form {
+            border: 1px solid var(--border);
+            background: rgba(12,13,16,0.75);
+            border-radius: 20px;
+            padding: 26px;
+            display: grid;
+            gap: 12px;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 15px;
+            padding: 13px 14px;
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 88px;
         }
 
         select option {
-            background-color: #0a0a0a;
-            color: white;
-            padding: 12px;
+            background: #101217;
         }
 
-        /* Button */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: rgba(57, 217, 138, 0.65);
+            box-shadow: 0 0 0 4px rgba(57, 217, 138, 0.12);
+        }
+
         button {
-            margin-top: 8px;
-            padding: 16px;
-            background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%);
-            color: #0b0b0d;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            background: linear-gradient(135deg, #f4f6fa, #dfe5ec);
+            color: #0c1017;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.28s ease;
-            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.12);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
         }
 
         button:disabled {
-            opacity: 0.7;
+            opacity: .75;
             cursor: not-allowed;
-            transform: none;
         }
 
-        /* Social Proof / Footer */
-        .footer-content {
-            margin-top: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-            animation: fadeIn 1s ease-out 0.6s backwards;
+        .message {
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
         }
 
-        .trusted-text {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.4);
+        .success {
+            border: 1px solid rgba(57, 217, 138, 0.4);
+            color: #b8f8d8;
+            background: rgba(57, 217, 138, 0.11);
+        }
+
+        .error {
+            border: 1px solid rgba(255, 120, 120, 0.4);
+            color: #ffc2c2;
+            background: rgba(255, 120, 120, 0.08);
+        }
+
+        .faq {
+            max-width: 840px;
+            margin: 0 auto;
+            display: grid;
+            gap: 10px;
+        }
+
+        details {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        summary {
+            cursor: pointer;
             font-weight: 600;
+        }
+
+        details p {
+            color: var(--muted);
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            margin-top: 30px;
+            padding: 34px 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .copyright {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
         }
 
         .social-links {
             display: flex;
-            gap: 24px;
+            gap: 14px;
         }
 
         .social-links a {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 20px;
-            transition: color 0.2s;
+            color: rgba(255,255,255,0.55);
+            font-size: 18px;
+            transition: color .2s ease;
         }
 
         .social-links a:hover {
-            color: white;
-        }
-
-        /* Messages */
-        .message {
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            text-align: center;
-            display: none;
-            margin-top: 10px;
-        }
-
-        .success {
-            background: rgba(255, 255, 255, 0.08);
-            color: #86efac;
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
-
-        .error {
-            background: rgba(248, 113, 113, 0.1);
-            color: #f87171;
-            border: 1px solid rgba(248, 113, 113, 0.2);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-
-
-        @keyframes floatOrb {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            50% { transform: translate(25px, -25px) scale(1.06); }
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.2); }
-            50% { box-shadow: 0 0 0 12px rgba(74, 222, 128, 0.02); }
+            color: #fff;
         }
 
         .reveal {
             opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(16px);
+            transition: opacity .8s ease, transform .8s ease;
         }
 
         .reveal.visible {
@@ -431,696 +564,252 @@
             transform: translateY(0);
         }
 
-        .metrics-strip {
-            width: 100%;
-            max-width: 980px;
-            margin: 0 auto 70px;
-            display: grid;
-            grid-template-columns: repeat(4, minmax(130px, 1fr));
-            gap: 14px;
+        @media (max-width: 960px) {
+            .shell-body,
+            .split {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid,
+            .preview-cards,
+            .logo-strip {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .sidebar {
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+            }
         }
 
-        .metric-item {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 16px 14px;
-            text-align: center;
-            animation: pulseGlow 4.5s ease-in-out infinite;
-        }
+        @media (max-width: 680px) {
+            header {
+                position: static;
+            }
 
-        .metric-item strong {
-            display: block;
-            font-size: 26px;
-            color: #9af8be;
-            letter-spacing: -1px;
-        }
+            .nav-links {
+                display: none;
+            }
 
-        .metric-item span {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-        }
+            .features-grid,
+            .preview-cards,
+            .logo-strip {
+                grid-template-columns: 1fr;
+            }
 
-        .product-preview {
-            padding: 20px 0 90px;
-        }
+            .hero-actions {
+                flex-direction: column;
+            }
 
-        .preview-grid {
-            max-width: 1050px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 24px;
-            padding: 0 24px;
-        }
-
-        .preview-panel,
-        .preview-stack article {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
-            padding: 26px;
-        }
-
-        .phone-shell {
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 16px;
-            background: rgba(5, 16, 8, 0.8);
-            max-width: 320px;
-        }
-
-        .scan-card {
-            border-radius: 14px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 14px;
-            margin-bottom: 12px;
-        }
-
-        .macro-bar {
-            height: 8px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.1);
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .macro-bar span {
-            display: block;
-            height: 100%;
-            width: 72%;
-            background: linear-gradient(90deg, #34d399, #a7f3d0);
-            animation: macroFill 2s ease-out;
-        }
-
-        @keyframes macroFill {
-            from { width: 0; }
-            to { width: 72%; }
-        }
-
-        .preview-stack {
-            display: grid;
-            gap: 20px;
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: rgba(74, 222, 128, 0.12);
-            color: #9af8be;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 80px 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 680px;
-            margin: 0 auto 44px;
-            padding: 0 24px;
-        }
-
-        .section-header h2 {
-            font-size: 36px;
-            margin-bottom: 12px;
-            letter-spacing: -1px;
-        }
-
-        .section-header p {
-            color: var(--text-secondary);
-            font-size: 17px;
-        }
-
-        .section-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            padding: 0 24px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 32px;
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .icon-box {
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #86efac;
-            font-size: 20px;
-            margin-bottom: 24px;
-        }
-
-        .feature-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            padding: 100px 0;
-            text-align: center;
-        }
-
-        .how-it-works h2 {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 60px;
-        }
-
-        .steps-container {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            gap: 40px;
-            padding: 0 24px;
-        }
-
-        .step {
-            flex: 1;
-            position: relative;
-        }
-
-        .step-number {
-            font-size: 48px;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.2);
-            margin-bottom: 16px;
-        }
-
-        .step h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #86efac;
-        }
-
-        .step p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .comparison {
-            padding: 60px 0 80px;
-        }
-
-        .comparison-card {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            overflow: hidden;
-        }
-
-        .comparison-row {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr 1fr;
-            gap: 12px;
-            padding: 18px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            align-items: center;
-        }
-
-        .comparison-row:last-child {
-            border-bottom: none;
-        }
-
-        .comparison-row div:first-child {
-            color: rgba(255, 255, 255, 0.75);
-            font-size: 14px;
-        }
-
-        .comparison-head {
-            background: rgba(255, 255, 255, 0.04);
-            font-weight: 700;
-            color: white;
-        }
-
-        .check {
-            color: #86efac;
-            font-weight: 700;
-        }
-
-        .xmark {
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: 700;
-        }
-
-        .testimonial-section {
-            padding: 40px 0 100px;
-        }
-
-        .testimonial-grid {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(220px, 1fr));
-            gap: 20px;
-            padding: 0 24px;
-        }
-
-        .testimonial-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 20px;
-            padding: 24px;
-        }
-
-        .testimonial-card p {
-            color: rgba(255, 255, 255, 0.78);
-            font-size: 15px;
-            margin-bottom: 16px;
-        }
-
-        .author {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.55);
-        }
-
-        .faq {
-            padding: 20px 0 90px;
-        }
-
-        .faq-list {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: grid;
-            gap: 12px;
-        }
-
-        details {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 16px 18px;
-        }
-
-        summary {
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        details p {
-            margin-top: 10px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .cta-band {
-            margin: 0 auto 90px;
-            max-width: 960px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            background: radial-gradient(circle at top right, rgba(255,255,255,0.12), rgba(10, 10, 12, 0.9));
-            border-radius: 24px;
-            padding: 34px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .cta-band h3 {
-            font-size: 30px;
-            line-height: 1.2;
-            margin-bottom: 8px;
-        }
-
-        .cta-band p {
-            color: var(--text-secondary);
-            max-width: 500px;
-            font-size: 15px;
-        }
-
-        .cta-band a {
-            color: #0b0b0d;
-            background: #f3f4f6;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 999px;
-            padding: 12px 22px;
-            white-space: nowrap;
-        }
-
-        /* Footer */
-        footer {
-            padding: 60px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: auto;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .logo.small {
-            font-size: 24px;
-        }
-
-        .copyright {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 13px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 48px; }
-            .hero { padding-top: 40px; }
-            .waitlist-form { padding: 24px; }
-            .steps-container { flex-direction: column; gap: 60px; }
-            .hero-highlights { grid-template-columns: 1fr; }
-            .testimonial-grid { grid-template-columns: 1fr; }
-            .comparison-row { grid-template-columns: 1.2fr 1fr 1fr; font-size: 14px; padding: 14px; }
-            .cta-band { flex-direction: column; align-items: flex-start; }
-            .metrics-strip { grid-template-columns: repeat(2, 1fr); }
-            .preview-grid { grid-template-columns: 1fr; }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="noise"></div>
+    <div class="grid-overlay"></div>
     <div class="wrapper">
         <header>
-            <div class="logo">airo!</div>
+            <div class="logo">airo<span>!</span></div>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How it works</a></li>
+                <li><a href="#direction">Direction</a></li>
+                <li><a href="#waitlist">Waitlist</a></li>
                 <li><a href="#faq">FAQ</a></li>
             </ul>
+            <a class="nav-cta" href="#waitlist"><i class="fa-solid fa-arrow-right"></i> Request early access</a>
         </header>
 
         <section class="hero">
-            <div class="hero-badge">
-                <span></span> In active development
-            </div>
-            
-            <h1>Nutrition Intelligence, <br><span>Reimagined.</span></h1>
-            
-            <p class="subtitle">
-                airo is currently being developed by our team to deliver premium nutrition guidance without the noise. Join the waitlist for early updates and access.
-            </p>
-
-            <div class="hero-highlights">
-                <div class="highlight-item"><i class="fa-solid fa-code-branch"></i> Product currently in build phase</div>
-                <div class="highlight-item"><i class="fa-solid fa-compass"></i> Premium UX direction in progress</div>
-                <div class="highlight-item"><i class="fa-solid fa-shield-heart"></i> Privacy-first architecture planned</div>
+            <div class="hero-badge"><i class="fa-solid fa-code"></i> App is actively being developed</div>
+            <h1>Meet your future <span class="accent">nutrition intelligence workspace.</span></h1>
+            <p class="subtitle">A premium, focused platform for meal understanding, planning, and guidance. We’re currently building the core product and inviting early users to join the journey.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="#waitlist"><i class="fa-solid fa-sparkles"></i> Join the waitlist</a>
+                <a class="btn btn-secondary" href="#direction"><i class="fa-solid fa-diagram-project"></i> View product direction</a>
             </div>
 
-            <div class="waitlist-container">
+            <div class="hero-shell reveal">
+                <div class="shell-head">
+                    <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                    <strong>airo • Product preview</strong>
+                    <span class="chip">development build</span>
+                </div>
+                <div class="shell-body">
+                    <aside class="sidebar">
+                        <h4>Core modules</h4>
+                        <ul>
+                            <li>Meal scanning engine</li>
+                            <li>Recipe intelligence system</li>
+                            <li>Insights & patterns dashboard</li>
+                        </ul>
+                        <h4>Current focus</h4>
+                        <ul>
+                            <li>Model quality and calibration</li>
+                            <li>Polished mobile-first UX</li>
+                            <li>Private onboarding flow</li>
+                        </ul>
+                    </aside>
+                    <div class="main-preview">
+                        <div class="preview-top">
+                            <h3>Built for clarity, not clutter.</h3>
+                            <span class="chip"><i class="fa-solid fa-circle-check"></i> roadmap in progress</span>
+                        </div>
+                        <div class="preview-cards">
+                            <article class="preview-card">
+                                <h5>Meal Understanding</h5>
+                                <p>Structured meal recognition and context-rich breakdowns are currently being refined for production quality.</p>
+                            </article>
+                            <article class="preview-card">
+                                <h5>Adaptive Guidance</h5>
+                                <p>Personalized suggestions are under active development to be practical, supportive, and easy to follow.</p>
+                            </article>
+                            <article class="preview-card">
+                                <h5>Planning Experience</h5>
+                                <p>Weekly planning and grocery workflows are being designed with a clean, high-signal interface.</p>
+                            </article>
+                            <article class="preview-card">
+                                <h5>Insight Layer</h5>
+                                <p>Trend and habit views are being built to help users make better decisions without overwhelming charts.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="logo-strip reveal">
+                <div class="logo-pill">Premium UI</div>
+                <div class="logo-pill">Privacy-first</div>
+                <div class="logo-pill">Early access</div>
+                <div class="logo-pill">Mobile-led</div>
+                <div class="logo-pill">In development</div>
+                <div class="logo-pill">Built by airo</div>
+            </div>
+        </section>
+
+        <section class="section reveal" id="features">
+            <div class="section-header">
+                <h2>Core features we’re building</h2>
+                <p>A more professional nutrition product means thoughtful flows, calmer visuals, and useful intelligence that respects your attention.</p>
+            </div>
+            <div class="features-grid">
+                <article class="feature-card">
+                    <i class="fa-solid fa-camera"></i>
+                    <h3>Smart meal capture</h3>
+                    <p>Capture meals quickly and route them into structured nutrition workflows with minimal friction.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <h3>Recipe intelligence</h3>
+                    <p>Generate relevant meal suggestions from goals, preferences, and practical day-to-day constraints.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <h3>Actionable insights</h3>
+                    <p>Understand patterns and behaviors through clear summaries designed for real decisions.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <h3>Weekly planning</h3>
+                    <p>Build routines with a guided planner that simplifies shopping and prep.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <h3>Mobile-first UX</h3>
+                    <p>Designed to feel premium and responsive on every screen size from day one.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <h3>Privacy by design</h3>
+                    <p>User trust is foundational; data handling is being built with privacy-first principles.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section reveal" id="direction">
+            <div class="split">
+                <article class="panel">
+                    <h3>Product direction</h3>
+                    <p>airo is still in active development. Instead of publishing hard metrics too early, we’re focused on building a high-quality foundation first.</p>
+                    <ul>
+                        <li>Stabilize meal recognition and feedback loops.</li>
+                        <li>Ship a clean onboarding journey for early users.</li>
+                        <li>Iterate quickly with waitlist feedback.</li>
+                    </ul>
+                </article>
+                <article class="panel">
+                    <h3>Development status</h3>
+                    <ul>
+                        <li>Design system and interaction polish ongoing.</li>
+                        <li>Core intelligence modules in implementation.</li>
+                        <li>Early-access release planning in progress.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="section reveal" id="waitlist">
+            <div class="section-header">
+                <h2>Request early access</h2>
+                <p>Join the waitlist to get development updates, preview milestones, and first-release access when the product is ready.</p>
+            </div>
+            <div class="waitlist-wrap">
                 <form id="waitlist-form" class="waitlist-form">
-                    <div class="input-group">
-                        <input type="text" name="name" placeholder="Full Name" required>
-                    </div>
-
-                    <div class="input-group">
-                        <input type="email" name="email" placeholder="Email address" required>
-                    </div>
-
-                    <div class="select-wrapper">
-                        <select name="source" required>
-                            <option value="" disabled selected>Where did you hear about us?</option>
-                            <option value="social">Social Media (X, Instagram)</option>
-                            <option value="friend">Friend / Colleague</option>
-                            <option value="search">Search Engine</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <textarea name="interest" placeholder="What features are you most interested in?" rows="2"></textarea>
-                    </div>
-
-                    <button type="submit" id="submit-btn">Join the Waitlist</button>
-                    
-                    <div id="success-msg" class="message success">
-                        <i class="fa-solid fa-check-circle"></i> You're on the list! We'll be in touch.
-                    </div>
+                    <input type="text" name="name" placeholder="Full name" required>
+                    <input type="email" name="email" placeholder="Email address" required>
+                    <select name="source" required>
+                        <option value="" disabled selected>How did you hear about airo?</option>
+                        <option value="social">Social media</option>
+                        <option value="friend">Friend / colleague</option>
+                        <option value="search">Search engine</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <textarea name="interest" placeholder="What would you like to use airo for first?"></textarea>
+                    <button type="submit" id="submit-btn">Join waitlist</button>
+                    <div id="success-msg" class="message success"><i class="fa-solid fa-check-circle"></i> Thanks — you're on the list.</div>
                     <div id="error-msg" class="message error"></div>
                 </form>
             </div>
-
         </section>
 
-        <section class="metrics-strip reveal">
-            <div class="metric-item"><strong>—</strong><span>accuracy metrics pending release</span></div>
-            <div class="metric-item"><strong>—</strong><span>user ratings coming after launch</span></div>
-            <div class="metric-item"><strong>WIP</strong><span>time-saving benchmarks in progress</span></div>
-            <div class="metric-item"><strong>WIP</strong><span>outcome studies in development</span></div>
-        </section>
-
-        <section class="product-preview reveal">
+        <section class="section reveal" id="faq">
             <div class="section-header">
-                <h2>A product that feels as smart as it looks</h2>
-                <p>A refined preview of the product direction while the developer team actively builds the full experience.</p>
+                <h2>FAQ</h2>
+                <p>Transparent answers while development is in progress.</p>
             </div>
-            <div class="preview-grid">
-                <div class="preview-panel">
-                    <div class="pill"><i class="fa-solid fa-camera"></i> Live AI meal scan</div>
-                    <div class="phone-shell">
-                        <div class="scan-card">
-                            <strong>Sample meal scan preview</strong>
-                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 6px;">Nutrition estimation module in active development</p>
-                            <div class="macro-bar"><span></span></div>
-                        </div>
-                        <div class="scan-card">
-                            <strong>Coach recommendation</strong>
-                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 6px;">Example coaching guidance shown as a product preview while personalized recommendations are being finalized.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="preview-stack">
-                    <article>
-                        <div class="pill"><i class="fa-solid fa-wand-magic-sparkles"></i> Personalized by design</div>
-                        <h3>Context-aware coaching</h3>
-                        <p>Adaptive logic and personalized coaching flows are currently being implemented by the developer.</p>
-                    </article>
-                    <article>
-                        <div class="pill"><i class="fa-solid fa-chart-pie"></i> Decision-ready insights</div>
-                        <h3>See what actually moves your health</h3>
-                        <p>Insight dashboards are in development and will be introduced progressively during early access.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features reveal" id="features">
-            <div class="section-header">
-                <h2>Everything you need to eat smarter</h2>
-                <p>A cleaner, professional experience inspired by modern product design: monochrome foundation with focused green accents.</p>
-            </div>
-            <div class="section-container">
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <h3>AI Analysis</h3>
-                    <p>Scan meals quickly and receive structured nutrition analysis as the core engine continues to evolve.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-utensils"></i>
-                    </div>
-                    <h3>Smart Recipes</h3>
-                    <p>Get personalized recipe suggestions based on your dietary goals and what's in your fridge.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <h3>Health Insights</h3>
-                    <p>Track your progress with detailed analytics and receive actionable health insights daily.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-calendar-check"></i>
-                    </div>
-                    <h3>Weekly Planning</h3>
-                    <p>Build a realistic meal plan for your week with automatic grocery lists and prep reminders.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-user-group"></i>
-                    </div>
-                    <h3>Coach + Community</h3>
-                    <p>Stay motivated with optional accountability circles, check-ins, and positive progress streaks.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-heart-pulse"></i>
-                    </div>
-                    <h3>Biomarker Friendly</h3>
-                    <p>Connect glucose, weight, and activity data to understand how your meals impact your body.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- How It Works -->
-        <section class="how-it-works reveal" id="how-it-works">
-            <h2>How it works</h2>
-            <div class="steps-container">
-                <div class="step">
-                    <div class="step-number">01</div>
-                    <h3>Snap</h3>
-                    <p>Take a photo of your food or scan a barcode.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">02</div>
-                    <h3>Analyze</h3>
-                    <p>Our AI identifies ingredients and calculates macros.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">03</div>
-                    <h3>Track</h3>
-                    <p>Get insights and adjust your diet effortlessly.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="comparison reveal">
-            <div class="section-header">
-                <h2>Beyond calorie counting</h2>
-                <p>We are intentionally avoiding hard claims until testing is complete. Below is the planned product direction.</p>
-            </div>
-            <div class="comparison-card">
-                <div class="comparison-row comparison-head">
-                    <div>Capability</div>
-                    <div>Typical app</div>
-                    <div>airo</div>
-                </div>
-                <div class="comparison-row">
-                    <div>Photo-based meal recognition</div>
-                    <div class="xmark">Limited</div>
-                    <div class="check" >Planned</div>
-                </div>
-                <div class="comparison-row">
-                    <div>Daily macro and micronutrient coaching</div>
-                    <div class="xmark">Basic</div>
-                    <div class="check" >Planned</div>
-                </div>
-                <div class="comparison-row">
-                    <div>Personalized recipe generation</div>
-                    <div class="xmark">No</div>
-                    <div class="check" >Planned</div>
-                </div>
-                <div class="comparison-row">
-                    <div>Habit insights with weekly action plan</div>
-                    <div class="xmark">Rare</div>
-                    <div class="check" >Planned</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="testimonial-section reveal">
-            <div class="section-header">
-                <h2>Development updates</h2>
-                <p>No user testimonials yet — the app is still under active development.</p>
-            </div>
-            <div class="testimonial-grid">
-                <article class="testimonial-card">
-                    <p>Current focus: finalizing meal recognition quality and polishing the visual scanning workflow.</p>
-                    <div class="author">— Build log, Week 1</div>
-                </article>
-                <article class="testimonial-card">
-                    <p>Current focus: recipe generation logic, shopping list structure, and cleaner planning interactions.</p>
-                    <div class="author">— Build log, Week 2</div>
-                </article>
-                <article class="testimonial-card">
-                    <p>Current focus: insights architecture, onboarding copy, and dashboard information hierarchy.</p>
-                    <div class="author">— Build log, Week 3</div>
-                </article>
-            </div>
-        </section>
-
-        <section class="faq reveal" id="faq">
-            <div class="section-header">
-                <h2>Frequently asked questions</h2>
-                <p>Everything you need to know before joining the waitlist.</p>
-            </div>
-            <div class="faq-list">
+            <div class="faq">
                 <details>
-                    <summary>When will airo launch?</summary>
-                    <p>We are onboarding waitlist users in batches. Early members will receive an invite and guided onboarding as features roll out.</p>
+                    <summary>Is the app available right now?</summary>
+                    <p>Not yet. airo is currently in development and we’re onboarding people through a waitlist process.</p>
                 </details>
                 <details>
-                    <summary>Will it work for different dietary preferences?</summary>
-                    <p>Diet preference support is being developed now and will expand over time after launch.</p>
+                    <summary>Will features evolve over time?</summary>
+                    <p>Yes. We expect to iterate quickly based on quality testing and user feedback from early access.</p>
                 </details>
                 <details>
-                    <summary>How is my data handled?</summary>
-                    <p>Your health data is encrypted, private by default, and never sold. You can export or delete your data at any time.</p>
+                    <summary>How will I know when access opens?</summary>
+                    <p>Waitlist members receive updates on milestones and invitations as stable releases become available.</p>
                 </details>
             </div>
-        </section>
-
-        <section class="cta-band reveal">
-            <div>
-                <h3>Ready to feel better every day?</h3>
-                <p>Join the waitlist to follow development updates and receive access when the first stable release is ready.</p>
-            </div>
-            <a href="#waitlist-form">Get early access</a>
         </section>
 
         <footer>
-            <div class="footer-content">
-                <div class="logo small">airo!</div>
-                <div class="social-links">
-                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#"><i class="fa-brands fa-discord"></i></a>
-                </div>
-                <p class="copyright">&copy; 2025 Airo. All rights reserved.</p>
+            <div class="logo">airo<span>!</span></div>
+            <p class="copyright">© 2026 airo. Built with care, still in development.</p>
+            <div class="social-links">
+                <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
             </div>
         </footer>
     </div>
 
     <script>
-        // Initialize Supabase
         const SUPABASE_URL = 'https://jxqmblmpenzkgxizoasa.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_VpO6UMKYs0E1zXVM0zbvqg_zukILte1';
-        
-        // Check if supabase is loaded
+
         if (typeof supabase === 'undefined') {
             console.error('Supabase SDK not loaded');
             document.getElementById('error-msg').textContent = 'Error: Could not load database SDK. Please check your internet connection.';
@@ -1128,22 +817,14 @@
         }
 
         const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-                persistSession: false
-            },
-            global: {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY
-                }
-            }
+            auth: { persistSession: false },
+            global: { headers: { apikey: SUPABASE_ANON_KEY } }
         });
 
         const form = document.getElementById('waitlist-form');
         const submitBtn = document.getElementById('submit-btn');
         const successMsg = document.getElementById('success-msg');
         const errorMsg = document.getElementById('error-msg');
-
-
 
         const revealItems = document.querySelectorAll('.reveal');
         const revealObserver = new IntersectionObserver((entries) => {
@@ -1159,11 +840,11 @@
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Joining...';
-            errorMsg.style.display = 'none';
             successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
 
             const formData = new FormData(form);
             const source = formData.get('source');
@@ -1178,25 +859,23 @@
             };
 
             try {
-                const { error } = await client
-                    .from('waitlist')
-                    .insert([data]);
-
+                const { error } = await client.from('waitlist').insert([data]);
                 if (error) throw error;
 
                 form.reset();
                 successMsg.style.display = 'block';
-                submitBtn.innerHTML = 'Joined!';
+                submitBtn.innerHTML = 'Joined';
+
                 setTimeout(() => {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Join the Waitlist';
-                }, 3000);
+                    submitBtn.innerHTML = 'Join waitlist';
+                }, 2600);
             } catch (error) {
                 console.error('Error:', error);
                 errorMsg.textContent = error.message || 'Something went wrong. Please try again.';
                 errorMsg.style.display = 'block';
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Join the Waitlist';
+                submitBtn.innerHTML = 'Join waitlist';
             }
         });
     </script>
