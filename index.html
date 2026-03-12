@@ -3,18 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>airo! - Nutrition Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Airo - Intelligent Health Ecosystem</title>
+    <!-- Premium sans-serif fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase & Clerk Auth Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      // Add your actual Clerk Publishable Key here when ready
+      window.clerkPublishableKey = "pk_test_placeholder";
+    </script>
+    <!-- Clerk JS (Will gracefully silently fail without a valid key) -->
+    <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_placeholder" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@4/dist/clerk.browser.js" type="text/javascript"></script>
+    
+    <!-- GSAP for Asus-style Scroll Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <style>
         :root {
-            --primary-green: #0c5920;
-            --dark-green: #022c0b;
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
+            --bg-master: #020402;
+            --bg-glass: rgba(15, 18, 15, 0.4);
+            --bg-glass-strong: rgba(15, 18, 15, 0.7);
+            
+            --accent-brand: #175e29;
+            --accent-brand-light: #2da14d;
+            --accent-brand-bright: #4ade80;
+            --accent-glow: rgba(23, 94, 41, 0.15);
+            
+            --text-title: #ffffff;
+            --text-body: #9ca3af;
+            --text-muted: #6b7280;
+            
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(74, 222, 128, 0.3);
+            
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -22,17 +47,21 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg-master);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000;
-            background-image: 
-                radial-gradient(circle at 50% 0%, #166534 0%, #0c5920 30%, #000000 80%);
-            color: var(--text-primary);
-            min-height: 100vh;
+            background-color: var(--bg-master);
+            color: var(--text-body);
+            line-height: 1.6;
             overflow-x: hidden;
-            line-height: 1.5;
+            position: relative;
         }
 
         body::before,
@@ -77,14 +106,23 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
 
-        /* Header */
-        header {
-            padding: 40px 0;
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: linear-gradient(to bottom, rgba(2, 4, 2, 0.9), transparent);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transform: translateY(-100%);
+            animation: slideDown 1s var(--ease-out-expo) forwards;
+        }
+
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -111,71 +149,87 @@
         }
 
         .logo {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(to bottom, #fff, #ccc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Hero Section */
-        .hero {
-            flex: 1;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-title);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 60px 0 100px;
+            gap: 10px;
+            text-decoration: none;
         }
 
-        .hero-badge {
+        .logo-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent-brand-bright);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-brand-bright);
+        }
+
+        .auth-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-login {
+            color: var(--text-body);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .nav-login:hover {
+            color: var(--text-title);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
             border-radius: 100px;
-            font-size: 14px;
-            font-weight: 500;
+            background: rgba(45, 161, 77, 0.1);
+            border: 1px solid rgba(45, 161, 77, 0.2);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-brand-bright);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             margin-bottom: 32px;
-            backdrop-filter: blur(10px);
-            animation: fadeInDown 0.8s ease-out;
+            box-shadow: 0 0 20px rgba(45, 161, 77, 0.1);
         }
 
-        .hero-badge span {
-            width: 6px;
-            height: 6px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #4ade80;
-        }
-
-        h1 {
-            font-size: 72px;
-            font-weight: 800;
-            line-height: 1.1;
+        .hero h1 {
+            font-size: clamp(52px, 8vw, 100px);
+            font-weight: 700;
+            line-height: 1.05;
             margin-bottom: 24px;
-            letter-spacing: -2px;
-            max-width: 900px;
-            animation: fadeInUp 0.8s ease-out 0.1s backwards;
+            animation: fadeUp 1s var(--ease-out-expo) 0.1s both;
         }
 
-        h1 span {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .hero p.subtitle {
+            font-size: clamp(18px, 2.5vw, 22px);
+            max-width: 600px;
+            margin: 0 auto 56px;
+            animation: fadeUp 1s var(--ease-out-expo) 0.2s both;
         }
 
-        .subtitle {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 540px;
-            margin-bottom: 56px;
-            font-weight: 400;
-            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        /* --- Waitlist Component --- */
+        .waitlist-wrapper {
+            animation: fadeUp 1s var(--ease-out-expo) 0.3s both;
+            z-index: 10;
         }
 
         .hero-highlights {
@@ -209,84 +263,71 @@
         .waitlist-container {
             width: 100%;
             max-width: 500px;
-            position: relative;
-            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+            margin: 0 auto;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
         }
 
-        /* Glow effect behind form */
-        .waitlist-container::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: linear-gradient(135deg, rgba(22, 101, 52, 0.5), rgba(12, 89, 32, 0.2));
-            filter: blur(40px);
-            z-index: -1;
-            border-radius: 40px;
-        }
-
-        .waitlist-form {
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        /* Input Styling */
-        .input-group {
-            position: relative;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .waitlist-inner {
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 12px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px;
-            transition: all 0.2s ease;
+            padding: 32px;
         }
 
-        input:focus, textarea:focus {
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input, select.native-style {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 15px;
+            color: var(--text-title);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        select.native-style {
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        
+        select.native-style option {
+            background-color: #0f120f;
+            color: white;
+        }
+
+        input:focus, select.native-style:focus {
             outline: none;
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(74, 222, 128, 0.5); /* Green focus */
+            border-color: var(--accent-brand-bright);
             box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1);
         }
 
-        input::placeholder, textarea::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Custom Select Styling */
-        .select-wrapper {
-            position: relative;
-        }
-
-        .select-wrapper::after {
-            content: '\f107'; /* FontAwesome Chevron Down */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
+        .select-icon {
             position: absolute;
             right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
+            bottom: 15px;
+            color: var(--text-muted);
             pointer-events: none;
-            font-size: 14px;
         }
 
-        select {
+        button[type="submit"] {
             width: 100%;
             padding: 14px 16px;
             background: rgba(255, 255, 255, 0.05);
@@ -320,37 +361,47 @@
             background: linear-gradient(135deg, #d7ffe5 0%, #7bf4a8 100%);
             color: #022c0b;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.28s ease;
             box-shadow: 0 12px 30px rgba(74, 222, 128, 0.22);
         }
-
-        button:hover {
+        
+        button[type="submit"]:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
         }
 
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
+        .status-msg {
+            font-size: 13px;
+            text-align: center;
+            margin-top: 16px;
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
         }
+        
+        .status-msg.success { background: rgba(45, 161, 77, 0.1); color: var(--accent-brand-bright); border: 1px solid rgba(45, 161, 77, 0.2); }
+        .status-msg.error { background: rgba(220, 38, 38, 0.1); color: #ef4444; border: 1px solid rgba(220, 38, 38, 0.2); }
 
-        /* Social Proof / Footer */
-        .footer-content {
-            margin-top: 80px;
+        /* --- Marquee (Realistic / In Dev) --- */
+        .marquee-container {
+            padding: 40px 0;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 24px;
-            animation: fadeIn 1s ease-out 0.6s backwards;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            background: rgba(0,0,0,0.3);
+            margin-top: 80px;
+            animation: fadeUp 1s var(--ease-out-expo) 0.5s both;
         }
 
-        .trusted-text {
-            font-size: 13px;
+        .marquee-title {
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: rgba(255, 255, 255, 0.4);
@@ -598,54 +649,97 @@
             margin-bottom: 24px;
         }
 
-        .feature-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            padding: 100px 0;
-            text-align: center;
-        }
-
-        .how-it-works h2 {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 60px;
-        }
-
-        .steps-container {
-            max-width: 900px;
-            margin: 0 auto;
+        .marquee {
             display: flex;
-            justify-content: space-between;
-            gap: 40px;
-            padding: 0 24px;
+            width: fit-content;
+            animation: scroll 30s linear infinite;
         }
 
-        .step {
-            flex: 1;
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0 32px;
+            white-space: nowrap;
+        }
+        
+        .marquee-item i {
+            color: var(--accent-brand-bright);
+            font-size: 18px;
+        }
+
+        /* --- ASUS-Style Scroll Animation Section --- */
+        .asus-scroll-section {
+            background: var(--bg-master);
+            position: relative;
+            overflow: hidden;
+            padding: 80px 0;
+        }
+
+        .pin-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
         }
 
-        .step-number {
-            font-size: 48px;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.2);
-            margin-bottom: 16px;
+        .phone-wrapper {
+            position: relative;
+            width: 320px;
+            z-index: 5;
         }
 
-        .step h3 {
+        .scroll-phone {
+            width: 100%;
+            display: block;
+            border-radius: 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        .scroll-label {
+            position: absolute;
+            width: 280px;
+            background: var(--bg-glass-strong);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 16px;
+            padding: 24px;
+            z-index: 10;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            /* Initial state for GSAP */
+            opacity: 0;
+        }
+
+        /* Default positioning for desktop */
+        .desktop-labels .label-1 { top: 15%; left: -320px; }
+        .desktop-labels .label-2 { top: 35%; right: -320px; text-align: right; }
+        .desktop-labels .label-3 { top: 55%; left: -320px; }
+        .desktop-labels .label-4 { top: 75%; right: -320px; text-align: right; }
+        
+        .desktop-labels .label-2 .label-content, .desktop-labels .label-4 .label-content { 
+            display: flex; flex-direction: column; align-items: flex-end; 
+        }
+
+        .label-line {
+            position: absolute;
+            top: 50%;
+            width: 80px;
+            height: 1px;
+            background: var(--accent-brand-bright);
+            box-shadow: 0 0 10px var(--accent-brand-bright);
+        }
+
+        .desktop-labels .line-left { left: 100%; }
+        .desktop-labels .line-right { right: 100%; }
+
+        .label-content h3 {
             font-size: 18px;
-            font-weight: 700;
             margin-bottom: 8px;
             color: #4ade80;
         }
@@ -808,18 +902,59 @@
 
         .footer-content {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 24px;
+            gap: 8px;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
-        .logo.small {
-            font-size: 24px;
+        .label-content i {
+            color: var(--accent-brand-bright);
         }
 
-        .copyright {
-            color: rgba(255, 255, 255, 0.3);
+        .label-content p {
+            font-size: 14px;
+            color: var(--text-body);
+        }
+        
+        /* Mobile layout for the feature cards (to avoid complex sticky lines on tiny screens) */
+        .mobile-features {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            padding: 40px 24px;
+        }
+        
+        .mobile-card {
+            background: var(--bg-glass-strong);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            padding: 60px 0;
+            background: rgba(0, 0, 0, 0.5);
+            margin-top: 100px;
+        }
+
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .footer-bottom {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: space-between;
             font-size: 13px;
+            color: var(--text-muted);
         }
 
         /* Responsive */
@@ -849,16 +984,27 @@
             </ul>
         </header>
 
-        <section class="hero">
-            <div class="hero-badge">
-                <span></span> Access Opening Soon
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <div class="logo-dot"></div>
+                Airo
+            </a>
+            <div class="auth-actions">
+                <div id="user-button"></div>
+                <button class="nav-login" id="clerk-sign-in">Sign In</button>
             </div>
-            
-            <h1>Nutrition Intelligence, <br><span>Reimagined.</span></h1>
-            
+        </div>
+    </nav>
+
+    <section class="hero" id="join">
+        <div class="container">
+            <div class="badge">
+                <i class="fa-solid fa-code-branch"></i> In Active Beta Development
+            </div>
+            <h1 class="gradient-text">Human health,<br>intelligently automated.</h1>
             <p class="subtitle">
-                Experience the future of meal tracking. AI-powered analysis, 
-                smart recipe generation, and personalized health insights.
+                Airo replaces the friction of tracking with ambient intelligence. Scan your meals, analyze your fridge, and generate healthy routines automatically.
             </p>
 
             <div class="hero-highlights">
@@ -994,7 +1140,8 @@
                     <p>Connect glucose, weight, and activity data to understand how your meals impact your body.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
         <!-- How It Works -->
         <section class="how-it-works reveal" id="how-it-works">
@@ -1113,29 +1260,172 @@
                 </div>
                 <p class="copyright">&copy; 2025 Airo. All rights reserved.</p>
             </div>
-        </footer>
+        </div>
     </div>
 
+    <!-- ASUS-Style Scrollytelling Section -->
+    <section class="asus-scroll-section" id="features">
+        <div class="container desktop-labels">
+            <div class="pin-container">
+                <div class="phone-wrapper">
+                    <img src="assets/app-mockup-sharp.png" alt="Airo App Interface" class="scroll-phone">
+                    
+                    <div class="scroll-label label-1">
+                        <div class="label-line line-left"></div>
+                        <div class="label-content">
+                            <h3><i class="fa-solid fa-snowflake"></i> Fridge AI</h3>
+                            <p>Point your camera at your open fridge. Airo identifies your ingredients and instantly generates healthy, macro-optimized recipes from what you already own.</p>
+                        </div>
+                    </div>
+
+                    <div class="scroll-label label-2">
+                        <div class="label-line line-right"></div>
+                        <div class="label-content">
+                            <h3><i class="fa-solid fa-utensils"></i> Smart Recipes</h3>
+                            <p>Stop wondering what to eat. Get beautiful, highly-personalized recipes catered perfectly to your exact daily macro targets.</p>
+                        </div>
+                    </div>
+
+                    <div class="scroll-label label-3">
+                        <div class="label-line line-left"></div>
+                        <div class="label-content">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Visual Tracking</h3>
+                            <p>See the data that actually moves the needle. Track adherence, micronutrient density, and consistency over time smoothly.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scroll-label label-4">
+                        <div class="label-line line-right"></div>
+                        <div class="label-content">
+                            <h3><i class="fa-solid fa-shield-halved"></i> 100% Private</h3>
+                            <p>Your dietary history is completely encrypted. We trace the data internally to improve the model, but we never trace the user.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Fallback for Asus Scroll (Stacking cards instead of complex pins) -->
+        <div class="mobile-features container">
+            <img src="assets/app-mockup-sharp.png" alt="Airo App Interface" class="scroll-phone" style="margin-bottom: 24px;">
+            <div class="mobile-card">
+                <h3><i class="fa-solid fa-snowflake" style="color:var(--accent-brand-bright)"></i> Fridge AI</h3>
+                <p>Point your camera at your open fridge. Airo identifies your ingredients and instantly generates healthy recipes.</p>
+            </div>
+            <div class="mobile-card">
+                <h3><i class="fa-solid fa-utensils" style="color:var(--accent-brand-bright)"></i> Smart Recipes</h3>
+                <p>Get beautiful, highly-personalized recipes catered perfectly to your exact daily macro targets.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <div>&copy; 2025 Airo. Built with precision. Currently in Beta.</div>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // Initialize Supabase
+        // --- 1. Supabase Initialization ---
         const SUPABASE_URL = 'https://jxqmblmpenzkgxizoasa.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_VpO6UMKYs0E1zXVM0zbvqg_zukILte1';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp4cW1ibG1wZW56a2d4aXpvYXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA5NzY3NjIsImV4cCI6MjA0NjU1Mjc2Mn0.YOxO0yHCRjQilOHYDu53_VwoBBfVHEFWxFVBVcjDPuI';
         
-        // Check if supabase is loaded
-        if (typeof supabase === 'undefined') {
-            console.error('Supabase SDK not loaded');
-            document.getElementById('error-msg').textContent = 'Error: Could not load database SDK. Please check your internet connection.';
-            document.getElementById('error-msg').style.display = 'block';
+        if (typeof supabase !== 'undefined') {
+            const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const form = document.getElementById('waitlist-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const statusBox = document.getElementById('status-msg');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+                statusBox.style.display = 'none';
+
+                const formData = new FormData(form);
+                const data = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    interest: `Source: ${formData.get('source')} | Desktop Form v2`,
+                    created_at: new Date().toISOString()
+                };
+
+                try {
+                    const { error } = await client.from('waitlist').insert([data]);
+                    if (error) throw error;
+
+                    form.reset();
+                    statusBox.innerHTML = '<i class="fa-solid fa-shield-check" style="margin-right: 6px;"></i> Waitlist joined successfully.';
+                    statusBox.className = 'status-msg success';
+                    statusBox.style.display = 'block';
+                    submitBtn.innerHTML = 'Secured <i class="fa-solid fa-check"></i>';
+                    
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Request Invite <i class="fa-solid fa-arrow-right-long"></i>';
+                    }, 4000);
+
+                } catch (error) {
+                    statusBox.textContent = error.message.includes('duplicate') 
+                        ? 'Email is already on the list.' 
+                        : 'An error occurred during submission.';
+                    statusBox.className = 'status-msg error';
+                    statusBox.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Request Invite <i class="fa-solid fa-arrow-right-long"></i>';
+                }
+            });
         }
 
-        const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-                persistSession: false
-            },
-            global: {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY
-                }
+        // --- 2. GSAP Asus-Style Scrollytelling Animation ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Only run the complex pin animation on desktop
+        ScrollTrigger.matchMedia({
+            "(min-width: 901px)": function() {
+                
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: ".asus-scroll-section",
+                        start: "top top",
+                        end: "+=3500", // Controls how long the scroll takes
+                        scrub: 1, // Smooth dragging
+                        pin: true,
+                    }
+                });
+
+                // Initial states
+                gsap.set(".scroll-label", { opacity: 0, scale: 0.9, y: 30 });
+                gsap.set(".scroll-phone", { opacity: 0, scale: 0.8, y: 50 });
+
+                // Animation Sequence
+                tl.to(".scroll-phone", { opacity: 1, scale: 1, y: 0, duration: 1 })
+                  
+                  // Label 1: Fridge AI
+                  .to(".label-1", { opacity: 1, scale: 1, y: 0, duration: 1 })
+                  .to(".label-1", { opacity: 1, duration: 1.5 }) // Pause
+                  .to(".label-1", { opacity: 0, scale: 0.9, y: -20, duration: 0.8 })
+                  
+                  // Label 2: Recipes
+                  .to(".label-2", { opacity: 1, scale: 1, y: 0, duration: 1 })
+                  .to(".label-2", { opacity: 1, duration: 1.5 }) 
+                  .to(".label-2", { opacity: 0, scale: 0.9, y: -20, duration: 0.8 })
+                  
+                  // Label 3: Gen AI Dashboards
+                  .to(".label-3", { opacity: 1, scale: 1, y: 0, duration: 1 })
+                  .to(".label-3", { opacity: 1, duration: 1.5 }) 
+                  .to(".label-3", { opacity: 0, scale: 0.9, y: -20, duration: 0.8 })
+                  
+                  // Label 4: Privacy
+                  .to(".label-4", { opacity: 1, scale: 1, y: 0, duration: 1 })
+                  .to(".label-4", { opacity: 1, duration: 1.5 }) 
+                  .to(".label-4", { opacity: 0, scale: 0.9, y: -20, duration: 0.8 })
+                  
+                  // Outro fade out the phone
+                  .to(".scroll-phone", { opacity: 0, scale: 0.8, y: -50, duration: 1 });
             }
         });
 
