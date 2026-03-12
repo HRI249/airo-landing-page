@@ -718,7 +718,7 @@ export default function Home() {
               },
               {
                 q: "What platforms does Airo support?",
-                a: "Airo launches on iOS first, with Android following shortly. It integrates with Apple Health, Google Fit, Fitbit, Whoop, Oura, and major fitness platforms.",
+                a: "Airo will launch on Android first. Integrations with Apple Health, Google Fit, Fitbit, Whoop, and Oura are planned for the future and will be rolled out as our user base grows.",
               },
               {
                 q: "Is Airo free?",
@@ -726,7 +726,7 @@ export default function Home() {
               },
               {
                 q: "When will I get access?",
-                a: "We're rolling out invites in batches starting Q2 2025. Waitlist members get priority access in the order they signed up.",
+                a: "We are actively developing Airo and expect to start rolling out invites in Q3 of 2026 or Q1 of 2027. Waitlist members will get priority access.",
               },
             ].map((faq, i) => (
               <div
@@ -754,12 +754,11 @@ export default function Home() {
       <footer className="relative z-10 py-20 px-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3">
-            <div
-              className="w-2.5 h-2.5 rounded-full"
-              style={{ background: "#4ade80", boxShadow: "0 0 8px #4ade80" }}
-            />
-            <span className="text-lg font-bold" style={{ color: "#f5f5f7" }}>
-              Airo
+            <span
+              className="text-3xl font-black tracking-tighter"
+              style={{ color: "#f5f5f7", letterSpacing: "-0.08em" }}
+            >
+              airo!
             </span>
           </div>
 

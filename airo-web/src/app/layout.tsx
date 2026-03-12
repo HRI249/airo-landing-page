@@ -41,21 +41,14 @@ export default async function RootLayout({
           >
             {/* Logo */}
             <a
-              href="#"
-              className="flex items-center gap-2.5 no-underline"
+              href="/"
+              className="flex items-center no-underline"
             >
-              <div
-                className="w-2.5 h-2.5 rounded-full"
-                style={{
-                  background: "#4ade80",
-                  boxShadow: "0 0 10px #4ade80",
-                }}
-              />
               <span
-                className="text-lg font-bold tracking-tight"
-                style={{ color: "#f5f5f7" }}
+                className="text-3xl font-black tracking-tighter"
+                style={{ color: "#f5f5f7", letterSpacing: "-0.08em" }}
               >
-                Airo
+                airo!
               </span>
             </a>
 
