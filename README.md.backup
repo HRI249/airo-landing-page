@@ -1,0 +1,83 @@
+# Airo - Smart AI Assistant for Nutrition Tracking
+
+Airo is a smart AI assistant that helps users track nutrition and plan meals effortlessly using image recognition and AI suggestions.
+
+## Features
+
+### Cal AI (Food Scoring)
+- Take a picture of a meal
+- AI analyzes the image to give a health score (healthy or not)
+- Calculate estimated calories
+- Users instantly know if their meal fits their goals
+
+### Fridge AI (Meal Planning)
+- Take a picture of your fridge
+- AI scans all visible ingredients
+- Based on the current time and fridge contents, AI suggests a meal plan
+- Generates recipes or meal ideas using available ingredients
+
+## Visual & UI Style
+
+- **Gradient Flow**: teal → light blue → white → yellow → orange → red → green → dark green → black
+- **Glassmorphism**: Smooth gradients across backgrounds, cards, and buttons
+- **Modern Design**: Rounded corners, airy spacing, subtle shadows
+- **Typography**: Clean and modern (Satoshi, Neue Montreal, or Plus Jakarta Sans)
+- **Micro-interactions**: Hover glow, fluid transitions, subtle animations
+
+## Installation
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. For iOS:
+```bash
+cd ios && pod install && cd ..
+```
+
+3. Run the app:
+```bash
+# For iOS
+npm run ios
+
+# For Android
+npm run android
+```
+
+## Dependencies
+
+- React Native 0.72.6
+- React Navigation 6.x
+- React Native Camera
+- React Native Linear Gradient
+- React Native Blur
+- React Native Vector Icons
+- React Native Animatable
+- React Native Paper
+
+## Project Structure
+
+```
+src/
+├── components/
+│   └── UIComponents.js      # Reusable UI components
+├── screens/
+│   ├── HomeScreen.js        # Main dashboard
+│   ├── CalAIScreen.js       # Food scanning feature
+│   ├── FridgeAIScreen.js    # Fridge scanning feature
+│   ├── CameraScreen.js      # Camera interface
+│   ├── ResultsScreen.js     # Results display
+│   └── ProfileScreen.js     # User profile
+└── styles/
+    └── theme.js             # Theme and styling
+```
+
+## Tagline
+
+"Snap, scan, and know your food."
+
+"Healthy meals, smarter planning."
+
+"From fridge to table, effortlessly."
+
