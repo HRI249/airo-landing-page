@@ -15,8 +15,10 @@
             --border: rgba(255, 255, 255, 0.12);
             --text: #f5f7fa;
             --muted: rgba(245, 247, 250, 0.72);
-            --accent: #39d98a;
-            --accent-soft: rgba(57, 217, 138, 0.18);
+            --accent: #48e5c2;
+            --accent-2: #7c8cff;
+            --accent-3: #d88bff;
+            --accent-soft: rgba(72, 229, 194, 0.18);
         }
 
         * {
@@ -32,7 +34,11 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #050707;
+            background:
+                radial-gradient(circle at 8% 12%, rgba(72, 229, 194, 0.08), transparent 25%),
+                radial-gradient(circle at 92% 18%, rgba(124, 140, 255, 0.12), transparent 35%),
+                radial-gradient(circle at 45% 88%, rgba(216, 139, 255, 0.08), transparent 40%),
+                #050607;
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
@@ -153,7 +159,11 @@
             color: #a9b2bf;
         }
 
-        h1 .accent { color: #a9b2bf; }
+        h1 .accent {
+            background: linear-gradient(120deg, #9adff1, #b8c8ff 40%, #e0b8ff 78%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         .subtitle {
             max-width: 760px;
@@ -356,6 +366,8 @@
         .section-header p {
             font-size: 17px;
             color: var(--muted);
+            max-width: 680px;
+            margin: 0 auto;
         }
 
         .features-grid {
@@ -385,6 +397,54 @@
         .feature-card p {
             font-size: 14px;
             color: var(--muted);
+        }
+
+        
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(210px, 1fr));
+            gap: 14px;
+        }
+
+        .step-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-weight: 800;
+            color: #09131d;
+            background: linear-gradient(135deg, #76f0d4, #9db0ff);
+        }
+
+        .step-card h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .status-ribbon {
+            margin-top: 18px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.02);
+            padding: 14px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.84);
         }
 
         .split {
@@ -431,6 +491,7 @@
             gap: 12px;
         }
 
+        .field,
         input,
         select,
         textarea,
@@ -448,6 +509,15 @@
         textarea {
             resize: vertical;
             min-height: 88px;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, #9bb0c9 50%), linear-gradient(135deg, #9bb0c9 50%, transparent 50%);
+            background-position: calc(100% - 20px) calc(50% - 3px), calc(100% - 14px) calc(50% - 3px);
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
         }
 
         select option {
@@ -568,7 +638,8 @@
 
             .features-grid,
             .preview-cards,
-            .logo-strip {
+            .logo-strip,
+            .steps-grid {
                 grid-template-columns: 1fr 1fr;
             }
 
@@ -589,7 +660,8 @@
 
             .features-grid,
             .preview-cards,
-            .logo-strip {
+            .logo-strip,
+            .steps-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -611,6 +683,7 @@
             <div class="logo">airo<span>!</span></div>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How it works</a></li>
                 <li><a href="#direction">Direction</a></li>
                 <li><a href="#waitlist">Waitlist</a></li>
                 <li><a href="#faq">FAQ</a></li>
@@ -620,7 +693,7 @@
 
         <section class="hero">
             <div class="hero-badge"><i class="fa-solid fa-code-branch"></i> IN ACTIVE BETA DEVELOPMENT</div>
-            <h1>Human health, intelligently automated.</h1>
+            <h1>Human health, <span class="accent">intelligently automated.</span></h1>
             <p class="subtitle">Airo replaces the friction of tracking with ambient intelligence. Scan your meals, analyze your fridge, and get guidance that fits real life — while we continue building the full platform.</p>
             <div class="hero-actions">
                 <a class="btn btn-primary" href="#waitlist"><i class="fa-solid fa-sparkles"></i> Join beta waitlist</a>
@@ -724,6 +797,32 @@
             </div>
         </section>
 
+
+        <section class="section reveal" id="how-it-works">
+            <div class="section-header">
+                <h2>How it works</h2>
+                <p>A cleaner, professional workflow from capture to action — designed to reduce friction and help people stay consistent.</p>
+            </div>
+            <div class="steps-grid">
+                <article class="step-card">
+                    <div class="step-number">01</div>
+                    <h3>Scan</h3>
+                    <p>Capture meals quickly with a lightweight, guided scan interface.</p>
+                </article>
+                <article class="step-card">
+                    <div class="step-number">02</div>
+                    <h3>Understand</h3>
+                    <p>Get structured, human-readable guidance instead of noisy dashboards.</p>
+                </article>
+                <article class="step-card">
+                    <div class="step-number">03</div>
+                    <h3>Improve</h3>
+                    <p>Turn insights into habits with planning prompts and practical suggestions.</p>
+                </article>
+            </div>
+            <div class="status-ribbon"><i class="fa-solid fa-circle-info"></i> We are polishing this flow for deployment and collecting early feedback through the waitlist.</div>
+        </section>
+
         <section class="section reveal" id="direction">
             <div class="split">
                 <article class="panel">
@@ -753,16 +852,16 @@
             </div>
             <div class="waitlist-wrap">
                 <form id="waitlist-form" class="waitlist-form">
-                    <input type="text" name="name" placeholder="Full name" required>
-                    <input type="email" name="email" placeholder="Email address" required>
-                    <select name="source" required>
+                    <input class="field" type="text" name="name" placeholder="Full name" required>
+                    <input class="field" type="email" name="email" placeholder="Email address" required>
+                    <select class="field" name="source" required>
                         <option value="" disabled selected>How did you hear about airo?</option>
                         <option value="social">Social media</option>
                         <option value="friend">Friend / colleague</option>
                         <option value="search">Search engine</option>
                         <option value="other">Other</option>
                     </select>
-                    <textarea name="interest" placeholder="What would you like to use airo for first?"></textarea>
+                    <textarea class="field" name="interest" placeholder="What would you like to use airo for first?"></textarea>
                     <button type="submit" id="submit-btn">Join waitlist</button>
                     <div id="success-msg" class="message success"><i class="fa-solid fa-check-circle"></i> Thanks — you're on the list.</div>
                     <div id="error-msg" class="message error"></div>
