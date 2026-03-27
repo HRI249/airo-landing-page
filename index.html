@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>airo! — Nutrition Intelligence in Development</title>
+    <title>Airo — In Active Beta Development</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -32,11 +32,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background:
-                radial-gradient(circle at 12% 14%, rgba(60, 64, 80, 0.35) 0%, transparent 30%),
-                radial-gradient(circle at 82% 18%, rgba(57, 217, 138, 0.14) 0%, transparent 26%),
-                radial-gradient(circle at 48% 85%, rgba(88, 87, 255, 0.08) 0%, transparent 38%),
-                var(--bg);
+            background: #050707;
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
@@ -53,7 +49,7 @@
                 linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
             background-size: 64px 64px;
             mask-image: radial-gradient(circle at center, rgba(0,0,0,0.65), rgba(0,0,0,0.98));
-            opacity: 0.55;
+            opacity: 0.35;
         }
 
         .wrapper {
@@ -83,6 +79,7 @@
         .logo {
             font-size: 28px;
             font-weight: 900;
+            color: #a9b2bf;
             letter-spacing: -0.7px;
         }
 
@@ -123,7 +120,7 @@
         }
 
         .hero {
-            padding: 48px 0 64px;
+            padding: 78px 0 64px;
             text-align: center;
         }
 
@@ -133,10 +130,12 @@
             align-items: center;
             border: 1px solid var(--border);
             border-radius: 999px;
-            background: rgba(255,255,255,0.03);
+            background: rgba(57,217,138,0.08);
             padding: 8px 14px;
             font-size: 13px;
-            color: rgba(255,255,255,0.85);
+            color: #56eaa3;
+            letter-spacing: 1.2px;
+            font-weight: 700;
             margin-bottom: 24px;
         }
 
@@ -151,13 +150,10 @@
             max-width: 980px;
             margin: 0 auto 18px;
             font-weight: 900;
+            color: #a9b2bf;
         }
 
-        h1 .accent {
-            background: linear-gradient(130deg, #ffffff 0%, #b4f2d3 45%, #5af0a8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        h1 .accent { color: #a9b2bf; }
 
         .subtitle {
             max-width: 760px;
@@ -623,12 +619,12 @@
         </header>
 
         <section class="hero">
-            <div class="hero-badge"><i class="fa-solid fa-code"></i> App is actively being developed</div>
-            <h1>Meet your future <span class="accent">nutrition intelligence workspace.</span></h1>
-            <p class="subtitle">A premium, focused platform for meal understanding, planning, and guidance. We’re currently building the core product and inviting early users to join the journey.</p>
+            <div class="hero-badge"><i class="fa-solid fa-code-branch"></i> IN ACTIVE BETA DEVELOPMENT</div>
+            <h1>Human health, intelligently automated.</h1>
+            <p class="subtitle">Airo replaces the friction of tracking with ambient intelligence. Scan your meals, analyze your fridge, and get guidance that fits real life — while we continue building the full platform.</p>
             <div class="hero-actions">
-                <a class="btn btn-primary" href="#waitlist"><i class="fa-solid fa-sparkles"></i> Join the waitlist</a>
-                <a class="btn btn-secondary" href="#direction"><i class="fa-solid fa-diagram-project"></i> View product direction</a>
+                <a class="btn btn-primary" href="#waitlist"><i class="fa-solid fa-sparkles"></i> Join beta waitlist</a>
+                <a class="btn btn-secondary" href="#direction"><i class="fa-solid fa-diagram-project"></i> View roadmap</a>
             </div>
 
             <div class="hero-shell reveal">

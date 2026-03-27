@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>airo! - Nutrition Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Airo — In Active Beta Development</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --primary-green: #0c5920;
-            --dark-green: #022c0b;
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
+            --bg: #060607;
+            --surface: #0f1013;
+            --surface-soft: #13151a;
+            --border: rgba(255, 255, 255, 0.12);
+            --text: #f5f7fa;
+            --muted: rgba(245, 247, 250, 0.72);
+            --accent: #39d98a;
+            --accent-soft: rgba(57, 217, 138, 0.18);
         }
 
         * {
@@ -24,20 +26,34 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000;
-            background-image: 
-                radial-gradient(circle at 50% 0%, #166534 0%, #0c5920 30%, #000000 80%);
-            color: var(--text-primary);
+            background: #050707;
+            color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.5;
         }
 
-        /* Layout */
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,0.65), rgba(0,0,0,0.98));
+            opacity: 0.35;
+        }
+
         .wrapper {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             padding: 0 24px;
             display: flex;
@@ -45,536 +61,751 @@
             min-height: 100vh;
         }
 
-        /* Header */
         header {
-            padding: 40px 0;
+            position: sticky;
+            top: 12px;
+            z-index: 30;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin: 16px 0 24px;
+            padding: 14px 18px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: rgba(10, 10, 12, 0.72);
+            backdrop-filter: blur(16px);
         }
 
         .logo {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(to bottom, #fff, #ccc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 28px;
+            font-weight: 900;
+            color: #a9b2bf;
+            letter-spacing: -0.7px;
         }
 
-        /* Hero Section */
-        .hero {
-            flex: 1;
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
             display: flex;
-            flex-direction: column;
+            list-style: none;
+            gap: 18px;
             align-items: center;
-            justify-content: center;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.82);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color .2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            background: linear-gradient(135deg, #151820 0%, #0f1013 100%);
+        }
+
+        .hero {
+            padding: 78px 0 64px;
             text-align: center;
-            padding: 60px 0 100px;
         }
 
         .hero-badge {
             display: inline-flex;
-            align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 32px;
-            backdrop-filter: blur(10px);
-            animation: fadeInDown 0.8s ease-out;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(57,217,138,0.08);
+            padding: 8px 14px;
+            font-size: 13px;
+            color: #56eaa3;
+            letter-spacing: 1.2px;
+            font-weight: 700;
+            margin-bottom: 24px;
         }
 
-        .hero-badge span {
-            width: 6px;
-            height: 6px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #4ade80;
+        .hero-badge i {
+            color: var(--accent);
         }
 
         h1 {
-            font-size: 72px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -2px;
-            max-width: 900px;
-            animation: fadeInUp 0.8s ease-out 0.1s backwards;
+            font-size: clamp(42px, 7vw, 90px);
+            line-height: 1.03;
+            letter-spacing: -2.2px;
+            max-width: 980px;
+            margin: 0 auto 18px;
+            font-weight: 900;
+            color: #a9b2bf;
         }
 
-        h1 span {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        h1 .accent { color: #a9b2bf; }
 
         .subtitle {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 540px;
-            margin-bottom: 56px;
-            font-weight: 400;
-            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+            max-width: 760px;
+            margin: 0 auto 34px;
+            font-size: clamp(17px, 2.3vw, 24px);
+            color: var(--muted);
         }
 
-        /* Waitlist Card */
-        .waitlist-container {
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-            animation: fadeInUp 0.8s ease-out 0.3s backwards;
-        }
-
-        /* Glow effect behind form */
-        .waitlist-container::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: linear-gradient(135deg, rgba(22, 101, 52, 0.5), rgba(12, 89, 32, 0.2));
-            filter: blur(40px);
-            z-index: -1;
-            border-radius: 40px;
-        }
-
-        .waitlist-form {
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
+        .hero-actions {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
         }
 
-        /* Input Styling */
-        .input-group {
-            position: relative;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .btn {
+            border: 1px solid var(--border);
             border-radius: 12px;
-            color: white;
-            font-family: 'Inter', sans-serif;
+            padding: 13px 20px;
             font-size: 15px;
-            transition: all 0.2s ease;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        input:focus, textarea:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(74, 222, 128, 0.5); /* Green focus */
-            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1);
+        .btn-primary {
+            background: #f5f7fa;
+            color: #0b0d12;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+        .btn-secondary {
+            background: rgba(255,255,255,0.03);
+            color: #fff;
         }
 
-        /* Custom Select Styling */
-        .select-wrapper {
-            position: relative;
+        .hero-shell {
+            max-width: 1100px;
+            margin: 0 auto;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.45);
         }
 
-        .select-wrapper::after {
-            content: '\f107'; /* FontAwesome Chevron Down */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            pointer-events: none;
+        .shell-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(7,8,10,0.75);
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.27);
+        }
+
+        .shell-head strong {
+            font-size: 13px;
+            color: rgba(255,255,255,0.86);
+        }
+
+        .shell-body {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 350px;
+        }
+
+        .sidebar {
+            border-right: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+            padding: 18px;
+        }
+
+        .sidebar h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .sidebar li {
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.88);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .main-preview {
+            padding: 20px;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 14px;
+        }
+
+        .preview-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .preview-top h3 {
+            font-size: 30px;
+            letter-spacing: -0.8px;
+        }
+
+        .chip {
+            font-size: 12px;
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--accent-soft);
+            color: #b8f8d8;
+        }
+
+        .preview-cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .preview-card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .preview-card h5 {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .preview-card p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .logo-strip {
+            margin: 24px auto 0;
+            max-width: 1000px;
+            border-top: 1px solid rgba(255,255,255,0.11);
+            padding: 18px 10px 0;
+            display: grid;
+            grid-template-columns: repeat(6, minmax(90px, 1fr));
+            gap: 12px;
+        }
+
+        .logo-pill {
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            text-align: center;
+            font-size: 12px;
+            padding: 8px 10px;
+            color: rgba(255,255,255,0.78);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .section {
+            padding: 84px 0;
+        }
+
+        .section-header {
+            max-width: 760px;
+            margin: 0 auto 34px;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            font-size: clamp(32px, 5vw, 54px);
+            line-height: 1.1;
+            letter-spacing: -1.2px;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            font-size: 17px;
+            color: var(--muted);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .feature-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            background: linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+        }
+
+        .feature-card i {
+            color: var(--accent);
+            margin-bottom: 12px;
+            font-size: 17px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 14px;
+        }
+
+        .panel {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .panel h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .panel p,
+        .panel li {
+            color: var(--muted);
             font-size: 14px;
         }
 
-        select {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px;
-            appearance: none; /* Remove default arrow */
-            -webkit-appearance: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .panel ul {
+            margin-left: 17px;
+            display: grid;
+            gap: 8px;
         }
 
-        select:focus {
-            outline: none;
-            border-color: rgba(74, 222, 128, 0.5);
-            background: rgba(255, 255, 255, 0.08);
+        .waitlist-wrap {
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .waitlist-form {
+            border: 1px solid var(--border);
+            background: rgba(12,13,16,0.75);
+            border-radius: 20px;
+            padding: 26px;
+            display: grid;
+            gap: 12px;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 15px;
+            padding: 13px 14px;
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 88px;
         }
 
         select option {
-            background-color: #0a0a0a;
-            color: white;
-            padding: 12px;
+            background: #101217;
         }
 
-        /* Button */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: rgba(57, 217, 138, 0.65);
+            box-shadow: 0 0 0 4px rgba(57, 217, 138, 0.12);
+        }
+
         button {
-            margin-top: 8px;
-            padding: 16px;
-            background: white;
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            background: linear-gradient(135deg, #f4f6fa, #dfe5ec);
+            color: #0c1017;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
         }
 
         button:disabled {
-            opacity: 0.7;
+            opacity: .75;
             cursor: not-allowed;
-            transform: none;
         }
 
-        /* Social Proof / Footer */
-        .footer-content {
-            margin-top: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-            animation: fadeIn 1s ease-out 0.6s backwards;
+        .message {
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
         }
 
-        .trusted-text {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.4);
+        .success {
+            border: 1px solid rgba(57, 217, 138, 0.4);
+            color: #b8f8d8;
+            background: rgba(57, 217, 138, 0.11);
+        }
+
+        .error {
+            border: 1px solid rgba(255, 120, 120, 0.4);
+            color: #ffc2c2;
+            background: rgba(255, 120, 120, 0.08);
+        }
+
+        .faq {
+            max-width: 840px;
+            margin: 0 auto;
+            display: grid;
+            gap: 10px;
+        }
+
+        details {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        summary {
+            cursor: pointer;
             font-weight: 600;
+        }
+
+        details p {
+            color: var(--muted);
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            margin-top: 30px;
+            padding: 34px 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .copyright {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
         }
 
         .social-links {
             display: flex;
-            gap: 24px;
+            gap: 14px;
         }
 
         .social-links a {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 20px;
-            transition: color 0.2s;
+            color: rgba(255,255,255,0.55);
+            font-size: 18px;
+            transition: color .2s ease;
         }
 
         .social-links a:hover {
-            color: white;
+            color: #fff;
         }
 
-        /* Messages */
-        .message {
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            text-align: center;
-            display: none;
-            margin-top: 10px;
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .8s ease, transform .8s ease;
         }
 
-        .success {
-            background: rgba(74, 222, 128, 0.1);
-            color: #4ade80;
-            border: 1px solid rgba(74, 222, 128, 0.2);
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .error {
-            background: rgba(248, 113, 113, 0.1);
-            color: #f87171;
-            border: 1px solid rgba(248, 113, 113, 0.2);
+        @media (max-width: 960px) {
+            .shell-body,
+            .split {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid,
+            .preview-cards,
+            .logo-strip {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .sidebar {
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+            }
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @media (max-width: 680px) {
+            header {
+                position: static;
+            }
 
-        /* Features Section */
-        .features {
-            padding: 80px 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
+            .nav-links {
+                display: none;
+            }
 
-        .section-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            padding: 0 24px;
-        }
+            .features-grid,
+            .preview-cards,
+            .logo-strip {
+                grid-template-columns: 1fr;
+            }
 
-        .feature-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 32px;
-            transition: transform 0.3s ease;
-        }
+            .hero-actions {
+                flex-direction: column;
+            }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .icon-box {
-            width: 48px;
-            height: 48px;
-            background: rgba(74, 222, 128, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #4ade80;
-            font-size: 20px;
-            margin-bottom: 24px;
-        }
-
-        .feature-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            padding: 100px 0;
-            text-align: center;
-        }
-
-        .how-it-works h2 {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 60px;
-        }
-
-        .steps-container {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            gap: 40px;
-            padding: 0 24px;
-        }
-
-        .step {
-            flex: 1;
-            position: relative;
-        }
-
-        .step-number {
-            font-size: 48px;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.2);
-            margin-bottom: 16px;
-        }
-
-        .step h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #4ade80;
-        }
-
-        .step p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        /* Footer */
-        footer {
-            padding: 60px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: auto;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .logo.small {
-            font-size: 24px;
-        }
-
-        .copyright {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 13px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 48px; }
-            .hero { padding-top: 40px; }
-            .waitlist-form { padding: 24px; }
-            .steps-container { flex-direction: column; gap: 60px; }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="grid-overlay"></div>
     <div class="wrapper">
         <header>
-            <div class="logo">airo!</div>
+            <div class="logo">airo<span>!</span></div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#direction">Direction</a></li>
+                <li><a href="#waitlist">Waitlist</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <a class="nav-cta" href="#waitlist"><i class="fa-solid fa-arrow-right"></i> Request early access</a>
         </header>
 
         <section class="hero">
-            <div class="hero-badge">
-                <span></span> Access Opening Soon
+            <div class="hero-badge"><i class="fa-solid fa-code-branch"></i> IN ACTIVE BETA DEVELOPMENT</div>
+            <h1>Human health, intelligently automated.</h1>
+            <p class="subtitle">Airo replaces the friction of tracking with ambient intelligence. Scan your meals, analyze your fridge, and get guidance that fits real life — while we continue building the full platform.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="#waitlist"><i class="fa-solid fa-sparkles"></i> Join beta waitlist</a>
+                <a class="btn btn-secondary" href="#direction"><i class="fa-solid fa-diagram-project"></i> View roadmap</a>
             </div>
-            
-            <h1>Nutrition Intelligence, <br><span>Reimagined.</span></h1>
-            
-            <p class="subtitle">
-                Experience the future of meal tracking. AI-powered analysis, 
-                smart recipe generation, and personalized health insights.
-            </p>
 
-            <div class="waitlist-container">
+            <div class="hero-shell reveal">
+                <div class="shell-head">
+                    <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                    <strong>airo • Product preview</strong>
+                    <span class="chip">development build</span>
+                </div>
+                <div class="shell-body">
+                    <aside class="sidebar">
+                        <h4>Core modules</h4>
+                        <ul>
+                            <li>Meal scanning engine</li>
+                            <li>Recipe intelligence system</li>
+                            <li>Insights & patterns dashboard</li>
+                        </ul>
+                        <h4>Current focus</h4>
+                        <ul>
+                            <li>Model quality and calibration</li>
+                            <li>Polished mobile-first UX</li>
+                            <li>Private onboarding flow</li>
+                        </ul>
+                    </aside>
+                    <div class="main-preview">
+                        <div class="preview-top">
+                            <h3>Built for clarity, not clutter.</h3>
+                            <span class="chip"><i class="fa-solid fa-circle-check"></i> roadmap in progress</span>
+                        </div>
+                        <div class="preview-cards">
+                            <article class="preview-card">
+                                <h5>Meal Understanding</h5>
+                                <p>Structured meal recognition and context-rich breakdowns are currently being refined for production quality.</p>
+                            </article>
+                            <article class="preview-card">
+                                <h5>Adaptive Guidance</h5>
+                                <p>Personalized suggestions are under active development to be practical, supportive, and easy to follow.</p>
+                            </article>
+                            <article class="preview-card">
+                                <h5>Planning Experience</h5>
+                                <p>Weekly planning and grocery workflows are being designed with a clean, high-signal interface.</p>
+                            </article>
+                            <article class="preview-card">
+                                <h5>Insight Layer</h5>
+                                <p>Trend and habit views are being built to help users make better decisions without overwhelming charts.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="logo-strip reveal">
+                <div class="logo-pill">Premium UI</div>
+                <div class="logo-pill">Privacy-first</div>
+                <div class="logo-pill">Early access</div>
+                <div class="logo-pill">Mobile-led</div>
+                <div class="logo-pill">In development</div>
+                <div class="logo-pill">Built by airo</div>
+            </div>
+        </section>
+
+        <section class="section reveal" id="features">
+            <div class="section-header">
+                <h2>Core features we’re building</h2>
+                <p>A more professional nutrition product means thoughtful flows, calmer visuals, and useful intelligence that respects your attention.</p>
+            </div>
+            <div class="features-grid">
+                <article class="feature-card">
+                    <i class="fa-solid fa-camera"></i>
+                    <h3>Smart meal capture</h3>
+                    <p>Capture meals quickly and route them into structured nutrition workflows with minimal friction.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <h3>Recipe intelligence</h3>
+                    <p>Generate relevant meal suggestions from goals, preferences, and practical day-to-day constraints.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <h3>Actionable insights</h3>
+                    <p>Understand patterns and behaviors through clear summaries designed for real decisions.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <h3>Weekly planning</h3>
+                    <p>Build routines with a guided planner that simplifies shopping and prep.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <h3>Mobile-first UX</h3>
+                    <p>Designed to feel premium and responsive on every screen size from day one.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <h3>Privacy by design</h3>
+                    <p>User trust is foundational; data handling is being built with privacy-first principles.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section reveal" id="direction">
+            <div class="split">
+                <article class="panel">
+                    <h3>Product direction</h3>
+                    <p>airo is still in active development. Instead of publishing hard metrics too early, we’re focused on building a high-quality foundation first.</p>
+                    <ul>
+                        <li>Stabilize meal recognition and feedback loops.</li>
+                        <li>Ship a clean onboarding journey for early users.</li>
+                        <li>Iterate quickly with waitlist feedback.</li>
+                    </ul>
+                </article>
+                <article class="panel">
+                    <h3>Development status</h3>
+                    <ul>
+                        <li>Design system and interaction polish ongoing.</li>
+                        <li>Core intelligence modules in implementation.</li>
+                        <li>Early-access release planning in progress.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="section reveal" id="waitlist">
+            <div class="section-header">
+                <h2>Request early access</h2>
+                <p>Join the waitlist to get development updates, preview milestones, and first-release access when the product is ready.</p>
+            </div>
+            <div class="waitlist-wrap">
                 <form id="waitlist-form" class="waitlist-form">
-                    <div class="input-group">
-                        <input type="text" name="name" placeholder="Full Name" required>
-                    </div>
-
-                    <div class="input-group">
-                        <input type="email" name="email" placeholder="Email address" required>
-                    </div>
-
-                    <div class="select-wrapper">
-                        <select name="source" required>
-                            <option value="" disabled selected>Where did you hear about us?</option>
-                            <option value="social">Social Media (X, Instagram)</option>
-                            <option value="friend">Friend / Colleague</option>
-                            <option value="search">Search Engine</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <textarea name="interest" placeholder="What features are you most interested in?" rows="2"></textarea>
-                    </div>
-
-                    <button type="submit" id="submit-btn">Join the Waitlist</button>
-                    
-                    <div id="success-msg" class="message success">
-                        <i class="fa-solid fa-check-circle"></i> You're on the list! We'll be in touch.
-                    </div>
+                    <input type="text" name="name" placeholder="Full name" required>
+                    <input type="email" name="email" placeholder="Email address" required>
+                    <select name="source" required>
+                        <option value="" disabled selected>How did you hear about airo?</option>
+                        <option value="social">Social media</option>
+                        <option value="friend">Friend / colleague</option>
+                        <option value="search">Search engine</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <textarea name="interest" placeholder="What would you like to use airo for first?"></textarea>
+                    <button type="submit" id="submit-btn">Join waitlist</button>
+                    <div id="success-msg" class="message success"><i class="fa-solid fa-check-circle"></i> Thanks — you're on the list.</div>
                     <div id="error-msg" class="message error"></div>
                 </form>
             </div>
-
         </section>
 
-        <!-- Features Section -->
-        <section class="features">
-            <div class="section-container">
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <h3>AI Analysis</h3>
-                    <p>Snap a photo of your meal and let our AI instantly analyze nutritional content with 98% accuracy.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-utensils"></i>
-                    </div>
-                    <h3>Smart Recipes</h3>
-                    <p>Get personalized recipe suggestions based on your dietary goals and what's in your fridge.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <h3>Health Insights</h3>
-                    <p>Track your progress with detailed analytics and receive actionable health insights daily.</p>
-                </div>
+        <section class="section reveal" id="faq">
+            <div class="section-header">
+                <h2>FAQ</h2>
+                <p>Transparent answers while development is in progress.</p>
             </div>
-        </section>
-
-        <!-- How It Works -->
-        <section class="how-it-works">
-            <h2>How it works</h2>
-            <div class="steps-container">
-                <div class="step">
-                    <div class="step-number">01</div>
-                    <h3>Snap</h3>
-                    <p>Take a photo of your food or scan a barcode.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">02</div>
-                    <h3>Analyze</h3>
-                    <p>Our AI identifies ingredients and calculates macros.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">03</div>
-                    <h3>Track</h3>
-                    <p>Get insights and adjust your diet effortlessly.</p>
-                </div>
+            <div class="faq">
+                <details>
+                    <summary>Is the app available right now?</summary>
+                    <p>Not yet. airo is currently in development and we’re onboarding people through a waitlist process.</p>
+                </details>
+                <details>
+                    <summary>Will features evolve over time?</summary>
+                    <p>Yes. We expect to iterate quickly based on quality testing and user feedback from early access.</p>
+                </details>
+                <details>
+                    <summary>How will I know when access opens?</summary>
+                    <p>Waitlist members receive updates on milestones and invitations as stable releases become available.</p>
+                </details>
             </div>
         </section>
 
         <footer>
-            <div class="footer-content">
-                <div class="logo small">airo!</div>
-                <div class="social-links">
-                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#"><i class="fa-brands fa-discord"></i></a>
-                </div>
-                <p class="copyright">&copy; 2025 Airo. All rights reserved.</p>
+            <div class="logo">airo<span>!</span></div>
+            <p class="copyright">© 2026 airo. Built with care, still in development.</p>
+            <div class="social-links">
+                <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
             </div>
         </footer>
     </div>
 
     <script>
-        // Initialize Supabase
         const SUPABASE_URL = 'https://jxqmblmpenzkgxizoasa.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_VpO6UMKYs0E1zXVM0zbvqg_zukILte1';
-        
-        // Check if supabase is loaded
+
         if (typeof supabase === 'undefined') {
             console.error('Supabase SDK not loaded');
             document.getElementById('error-msg').textContent = 'Error: Could not load database SDK. Please check your internet connection.';
@@ -582,14 +813,8 @@
         }
 
         const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-                persistSession: false
-            },
-            global: {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY
-                }
-            }
+            auth: { persistSession: false },
+            global: { headers: { apikey: SUPABASE_ANON_KEY } }
         });
 
         const form = document.getElementById('waitlist-form');
@@ -597,13 +822,25 @@
         const successMsg = document.getElementById('success-msg');
         const errorMsg = document.getElementById('error-msg');
 
+        const revealItems = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        revealItems.forEach((item) => revealObserver.observe(item));
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Joining...';
-            errorMsg.style.display = 'none';
             successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
 
             const formData = new FormData(form);
             const source = formData.get('source');
@@ -618,25 +855,23 @@
             };
 
             try {
-                const { error } = await client
-                    .from('waitlist')
-                    .insert([data]);
-
+                const { error } = await client.from('waitlist').insert([data]);
                 if (error) throw error;
 
                 form.reset();
                 successMsg.style.display = 'block';
-                submitBtn.innerHTML = 'Joined!';
+                submitBtn.innerHTML = 'Joined';
+
                 setTimeout(() => {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Join the Waitlist';
-                }, 3000);
+                    submitBtn.innerHTML = 'Join waitlist';
+                }, 2600);
             } catch (error) {
                 console.error('Error:', error);
                 errorMsg.textContent = error.message || 'Something went wrong. Please try again.';
                 errorMsg.style.display = 'block';
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Join the Waitlist';
+                submitBtn.innerHTML = 'Join waitlist';
             }
         });
     </script>
